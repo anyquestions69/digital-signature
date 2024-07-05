@@ -1,15 +1,30 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseInterceptors,
+  UploadedFile,
+} from '@nestjs/common';
 import { SignatureService } from './signature.service';
 import { CreateSignatureDto } from './dto/create-signature.dto';
 import { UpdateSignatureDto } from './dto/update-signature.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
-@Controller('signature')
+@Controller('sign')
 export class SignatureController {
   constructor(private readonly signatureService: SignatureService) {}
 
-  @Post()
-  create(@Body() createSignatureDto: CreateSignatureDto) {
-    return this.signatureService.create(createSignatureDto);
+  @UseInterceptors(FileInterceptor('file'))
+  @Post(':postId')
+  create(
+    @Param('postId') postId: string,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.signatureService.create(+postId, file);
   }
 
   @Get()
@@ -23,7 +38,10 @@ export class SignatureController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSignatureDto: UpdateSignatureDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateSignatureDto: UpdateSignatureDto,
+  ) {
     return this.signatureService.update(+id, updateSignatureDto);
   }
 

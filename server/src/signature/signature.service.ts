@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { CreateSignatureDto } from './dto/create-signature.dto';
 import { UpdateSignatureDto } from './dto/update-signature.dto';
+import { PrismaService } from 'prisma/prisma.service';
 
 @Injectable()
 export class SignatureService {
-  create(createSignatureDto: CreateSignatureDto) {
-    return 'This action adds a new signature';
+  constructor(private prisma:PrismaService){}
+  create(postId:number, file:Express.Multer.File) {
+    return this.prisma.signature.create({data:});
   }
 
   findAll() {

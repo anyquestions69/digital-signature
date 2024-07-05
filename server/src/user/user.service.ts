@@ -14,8 +14,8 @@ export class UserService {
     return this.prisma.user.findMany();
   }
 
-  findOne(phone: bigint) {
-    return this.prisma.user.findFirst({ where: { phone } });
+  findOne(id: number) {
+    return this.prisma.user.findFirst({ where: { id } });
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
