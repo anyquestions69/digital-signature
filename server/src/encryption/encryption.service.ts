@@ -24,9 +24,7 @@ export class EncryptionService {
     if (!fs.existsSync('./keys/' + phone)) {
       fs.mkdirSync('./keys/' + phone, { recursive: true });
       console.log(`Directory '${'./keys/' + phone}' created.`);
-    } else {
-      console.log(`Directory '${'./keys/' + phone}' already exists.`);
-    }
+    } 
     fs.writeFile('./keys/' + phone + '/private.pem', privateKey, (err) => {
       if (err) {
         console.error(`Failed to write file: ${err}`);
