@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import * as crypto from 'crypto';
+import * as fs from 'fs';
 
 @Injectable()
 export class EncryptionService {
-  async generateKeys(passphrase: string): Promise<{ publicKey: string; privateKey: string }> {
+  async generateKeys(
+    phone: string,
+    passphrase: string,
+  ): Promise<{ publicKey: string; privateKey: string }> {
     const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
       modulusLength: 4096,
       publicKeyEncoding: {
@@ -17,7 +21,26 @@ export class EncryptionService {
         passphrase: passphrase,
       },
     });
-
+    if (!fs.existsSync('./keys/' + phone)) {
+      fs.mkdirSync('./keys/' + phone, { recursive: true });
+      console.log(`Directory '${'./keys/' + phone}' created.`);
+    } else {
+      console.log(`Directory '${'./keys/' + phone}' already exists.`);
+    }
+    fs.writeFile('./keys/' + phone + '/private.pem', privateKey, (err) => {
+      if (err) {
+        console.error(`Failed to write file: ${err}`);
+      } else {
+        console.log('File written successfully.');
+      }
+    });
+    fs.writeFile('./keys/' + phone + '/public.pem', publicKey, (err) => {
+      if (err) {
+        console.error(`Failed to write file: ${err}`);
+      } else {
+        console.log('File written successfully.');
+      }
+    });
     return { publicKey, privateKey };
   }
   encrypt(data, publicKey: string) {

@@ -7,7 +7,7 @@ import { PrismaService } from 'prisma/prisma.service';
 export class SignatureService {
   constructor(private prisma: PrismaService) { }
   create(postId: number, file: Express.Multer.File, req) {
-    return this.prisma.signature.create({ data: { postId: postId, userId: req.user.id } });
+   // return this.prisma.signature.create({ data: { postId: postId, userId: req.user.id } });
   }
 
   findAll() {

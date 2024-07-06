@@ -7,36 +7,31 @@ import {
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from 'prisma/prisma.service';
 import { EncryptionService } from 'src/encryption/encryption.service';
 import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private prisma: PrismaService,
     private rsa: EncryptionService,
     private usersService: UserService,
     private readonly jwtService: JwtService,
   ) {}
   async register(register: RegisterDto) {
     const { publicKey, privateKey } = await this.rsa.generateKeys(
+      String(register.phone),
       register.password,
     );
     const user = await this.usersService.findByPhone(register.phone);
     if (user) {
-      throw new ConflictException('Пользователь с таким номером уже существует');
+      throw new ConflictException(
+        'Пользователь с таким номером уже существует',
+      );
     }
     if (register.password !== register.repass) {
       throw new BadRequestException('Пароли не совпадают');
     }
-    const reg = await this.prisma.user.create({
-      data: {
-        phone: register.phone,
-        name: register.name,
-        wallet: String(register.phone),
-      },
-    });
+    const reg = await this.usersService.create(register);
     const payload = { id: reg.id, phone: reg.phone };
     return {
       access_token: await this.jwtService.signAsync(payload),
