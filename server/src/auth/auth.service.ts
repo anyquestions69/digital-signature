@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -16,25 +17,27 @@ export class AuthService {
     private prisma: PrismaService,
     private rsa: EncryptionService,
     private usersService: UserService,
-    private jwtService: JwtService,
+    private readonly jwtService: JwtService,
   ) {}
   async register(register: RegisterDto) {
-    const { publicKey, privateKey } = await this.rsa.generateKeys(register.password);
+    const { publicKey, privateKey } = await this.rsa.generateKeys(
+      register.password,
+    );
     const user = await this.usersService.findByPhone(register.phone);
     if (user) {
-      throw new ConflictException('Пользователь с таким email уже существует');
+      throw new ConflictException('Пользователь с таким номером уже существует');
     }
     if (register.password !== register.repass) {
       throw new BadRequestException('Пароли не совпадают');
     }
-    const reg = await this.prisma.user.create({data:{
+    const reg = await this.prisma.user.create({
+      data: {
         phone: register.phone,
         name: register.name,
         wallet: String(register.phone),
-        role:Guest
-      }}
-    );
-    const payload = { sub: reg.id, phone: reg.phone };
+      },
+    });
+    const payload = { id: reg.id, phone: reg.phone };
     return {
       access_token: await this.jwtService.signAsync(payload),
       privateKey,
@@ -42,7 +45,14 @@ export class AuthService {
     };
   }
 
-  login(loginDto: LoginDto) {
-    return `This action returns all auth`;
+  async login(loginDto: LoginDto) {
+    const user = await this.usersService.findByPhone(loginDto.phone);
+    if (user?.password !== loginDto.password) {
+      throw new UnauthorizedException();
+    }
+    const payload = { id: user.id, phone: user.phone };
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+    };
   }
 }

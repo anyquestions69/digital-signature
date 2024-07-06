@@ -5,9 +5,9 @@ import { PrismaService } from 'prisma/prisma.service';
 
 @Injectable()
 export class SignatureService {
-  constructor(private prisma:PrismaService){}
-  create(postId:number, file:Express.Multer.File) {
-   //return this.prisma.signature.create({data:{postId:postId,user:{connect:}}});
+  constructor(private prisma: PrismaService) { }
+  create(postId: number, file: Express.Multer.File, req) {
+    return this.prisma.signature.create({ data: { postId: postId, userId: req.user.id } });
   }
 
   findAll() {
