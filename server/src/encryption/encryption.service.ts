@@ -3,7 +3,7 @@ import * as crypto from 'crypto';
 
 @Injectable()
 export class EncryptionService {
-  generateKeys(passphrase: string): { publicKey: string; privateKey: string } {
+  async generateKeys(passphrase: string): Promise<{ publicKey: string; privateKey: string }> {
     const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
       modulusLength: 4096,
       publicKeyEncoding: {

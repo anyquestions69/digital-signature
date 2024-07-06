@@ -18,7 +18,7 @@ model User {
   phone BigInt  @unique
   wallet String @unique
   name  String?
-  role Role
+  role Role     @default(Guest)
   signatures Signature[]
 }
 

@@ -5,9 +5,10 @@ import { UserModule } from './user/user.module';
 import { PostModule } from './post/post.module';
 import { SignatureModule } from './signature/signature.module';
 import { EncryptionService } from './encryption/encryption.service';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [UserModule, PostModule, SignatureModule],
+  imports: [UserModule, PostModule, SignatureModule, AuthModule],
   controllers: [AppController],
   providers: [AppService, EncryptionService],
 })

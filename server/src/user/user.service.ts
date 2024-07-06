@@ -5,7 +5,7 @@ import { PrismaService } from 'prisma/prisma.service';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
   create(createUserDto: CreateUserDto) {
     return 'This action adds a new user';
   }
@@ -17,7 +17,9 @@ export class UserService {
   findOne(id: number) {
     return this.prisma.user.findFirst({ where: { id } });
   }
-
+  findByPhone(phone: bigint) {
+    return this.prisma.user.findFirst({ where: { phone } });
+  }
   update(id: number, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
