@@ -7,7 +7,7 @@ export class EncryptionService {
   async generateKeys(
     phone: string,
     passphrase: string,
-  ): Promise<{ publicKey: string; privateKey: string }> {
+  ): Promise<{ publicKey: string }> {
     const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
       modulusLength: 4096,
       publicKeyEncoding: {
@@ -41,7 +41,7 @@ export class EncryptionService {
         console.log('File written successfully.');
       }
     });
-    return { publicKey, privateKey };
+    return { publicKey };
   }
   encrypt(data, publicKey: string) {
     const buffer = Buffer.from(data);

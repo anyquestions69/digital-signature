@@ -13,7 +13,7 @@ export class UserService {
         name: register.name,
         wallet: String(register.phone),
       },
-    });;
+    });
   }
 
   findAll() {

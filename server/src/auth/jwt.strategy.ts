@@ -5,15 +5,15 @@ import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-    constructor() {
-        super({
-            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-            ignoreExpiration: false,
-            secretOrKey: 'YOUR_SECRET_KEY', // Replace with your secret key
-        });
-    }
+  constructor() {
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false,
+      secretOrKey: 'YOUR_SECRET_KEY', // Replace with your secret key
+    });
+  }
 
-    async validate(payload: any) {
-        return { userId: payload.id, phone: payload.phone };
-    }
+  async validate(payload: any) {
+    return { userId: payload.id, phone: payload.phone };
+  }
 }

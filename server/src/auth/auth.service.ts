@@ -18,7 +18,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
   async register(register: RegisterDto) {
-    const { publicKey, privateKey } = await this.rsa.generateKeys(
+    const { publicKey } = await this.rsa.generateKeys(
       String(register.phone),
       register.password,
     );
@@ -35,7 +35,6 @@ export class AuthService {
     const payload = { id: reg.id, phone: reg.phone };
     return {
       access_token: await this.jwtService.signAsync(payload),
-      privateKey,
       publicKey,
     };
   }
