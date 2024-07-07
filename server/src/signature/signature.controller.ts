@@ -32,7 +32,7 @@ export class SignatureController {
     @UploadedFile() file: Express.Multer.File,
     @Request() req,
   ) {
-    return req.user//this.signatureService.create(+postId, file, req);
+    return this.signatureService.create(+postId, file, req);
   }
 
   @Get()
