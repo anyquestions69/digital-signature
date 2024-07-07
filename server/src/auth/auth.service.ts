@@ -32,7 +32,7 @@ export class AuthService {
       register.phone,
       register.password,
     );
-    const payload = { id: reg.id, phone: String(reg.phone), role: user.role };
+    const payload = { id: reg.id, phone: String(reg.phone), role: reg.role };
     return {
       access_token: await this.jwtService.signAsync(payload),
       publicKey,
@@ -55,7 +55,7 @@ export class AuthService {
   async profile(req) {
     const user = await this.usersService.findOne(req.user.userId);
     if (!user) throw new UnauthorizedException('Неверный номер телефона');
-    const { password, ...data } = user;
+    const { ...data } = user;
     return data;
   }
 }

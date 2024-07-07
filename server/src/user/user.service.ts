@@ -18,17 +18,20 @@ export class UserService {
   }
 
   findAll() {
-    return this.prisma.user.findMany();
+    return this.prisma.user.findMany({ omit: { password: true } });
   }
 
   findOne(id: number) {
-    return this.prisma.user.findFirst({ where: { id } });
+    return this.prisma.user.findFirst({
+      where: { id },
+      omit: { password: true },
+    });
   }
   findByPhone(phone: string) {
-    return this.prisma.user.findFirst({ where: { phone:phone } });
+    return this.prisma.user.findFirst({ where: { phone } });
   }
   update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+    return this.prisma.user.update({ data: updateUserDto, where: { id } });
   }
   setAdmin(id: number) {
     return this.prisma.user.update({ data: { role: 'Admin' }, where: { id } });

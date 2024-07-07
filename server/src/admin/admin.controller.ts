@@ -11,6 +11,7 @@ import {
   UploadedFile,
   UseGuards,
   UseInterceptors,
+  Put,
 } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { PostService } from 'src/post/post.service';
@@ -41,7 +42,11 @@ export class AdminController {
   }
 
   @Patch('post/:id')
-  updatePost(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto, @Request() req) {
+  updatePost(
+    @Param('id') id: string,
+    @Body() updatePostDto: UpdatePostDto,
+    @Request() req,
+  ) {
     if (req.user.role !== 'Admin') throw new ForbiddenException('Not admin');
     return this.postService.update(+id, updatePostDto);
   }
@@ -53,9 +58,18 @@ export class AdminController {
   }
 
   @Patch('user/:id')
-  updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @Request() req) {
+  updateUser(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+    @Request() req,
+  ) {
     if (req.user.role !== 'Admin') throw new ForbiddenException('Not admin');
     return this.userService.update(+id, updateUserDto);
+  }
+  @Put('user/:id')
+  setAdmin(@Param('id') id: string, @Request() req) {
+    if (req.user.role !== 'Admin') throw new ForbiddenException('Not admin');
+    return this.userService.setAdmin(+id);
   }
 
   @Delete('user/:id')
