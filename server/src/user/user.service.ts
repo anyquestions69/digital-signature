@@ -31,8 +31,11 @@ export class UserService {
   update(id: number, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
+  setAdmin(id: number) {
+    return this.prisma.user.update({ data: { role: 'Admin' }, where: { id } });
+  }
 
   remove(id: number) {
-    return `This action removes a #${id} user`;
+    return this.prisma.user.delete({ where: { id } });
   }
 }

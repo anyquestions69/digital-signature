@@ -12,8 +12,6 @@ import {
   Request,
 } from '@nestjs/common';
 import { SignatureService } from './signature.service';
-import { CreateSignatureDto } from './dto/create-signature.dto';
-import { UpdateSignatureDto } from './dto/update-signature.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtStrategy } from 'src/auth/jwt.strategy';
