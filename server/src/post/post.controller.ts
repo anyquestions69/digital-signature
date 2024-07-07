@@ -24,18 +24,6 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
-  @UseInterceptors(FileInterceptor('file', multerOptions))
-  @UseGuards(JwtAuthGuard)
-  @Post()
-  create(
-    @UploadedFile() file: Express.Multer.File,
-    @Body() createPostDto: CreatePostDto,
-    @Request() req,
-  ) {
-    if (req.user.role !== 'Admin') throw new ForbiddenException('Not admin');
-    return this.postService.create(createPostDto, file);
-  }
-
   @Get()
   findAll() {
     return this.postService.findAll();
@@ -44,15 +32,5 @@ export class PostController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.postService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postService.update(+id, updatePostDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.postService.remove(+id);
   }
 }
