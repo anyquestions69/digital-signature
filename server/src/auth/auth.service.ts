@@ -41,10 +41,12 @@ export class AuthService {
 
   async login(loginDto: LoginDto) {
     const user = await this.usersService.findByPhone(loginDto.phone);
+    if (!user) 
+      throw new UnauthorizedException('Неверный номер телефона');
     const isValid = await bcrypt.compare(loginDto.password, user.password);
 
     if (!isValid) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Неверный пароль');
     }
     const payload = { id: user.id, phone: String(user.phone) };
     return {
