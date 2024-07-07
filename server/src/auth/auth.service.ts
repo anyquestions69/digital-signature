@@ -9,7 +9,7 @@ import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { EncryptionService } from 'src/encryption/encryption.service';
 import { UserService } from 'src/user/user.service';
-
+import bcrypt from 'bcrypt';
 @Injectable()
 export class AuthService {
   constructor(
@@ -41,7 +41,9 @@ export class AuthService {
 
   async login(loginDto: LoginDto) {
     const user = await this.usersService.findByPhone(loginDto.phone);
-    if (user?.password !== loginDto.password) {
+    const isValid = await bcrypt.compare(loginDto.password, user.password);
+
+    if (!isValid) {
       throw new UnauthorizedException();
     }
     const payload = { id: user.id, phone: user.phone };
