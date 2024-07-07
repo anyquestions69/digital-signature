@@ -9,7 +9,7 @@ import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { EncryptionService } from 'src/encryption/encryption.service';
 import { UserService } from 'src/user/user.service';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class AuthService {
   constructor(
@@ -32,7 +32,7 @@ export class AuthService {
       String(register.phone),
       register.password,
     );
-    const payload = { id: reg.id, phone: reg.phone };
+    const payload = { id: reg.id, phone: String(reg.phone) };
     return {
       access_token: await this.jwtService.signAsync(payload),
       publicKey,
@@ -46,7 +46,7 @@ export class AuthService {
     if (!isValid) {
       throw new UnauthorizedException();
     }
-    const payload = { id: user.id, phone: user.phone };
+    const payload = { id: user.id, phone: String(user.phone) };
     return {
       access_token: await this.jwtService.signAsync(payload),
     };
