@@ -15,10 +15,9 @@ datasource db {
 
 model User {
   id    Int     @default(autoincrement()) @id
-  phone BigInt  @unique
-  wallet String @unique
-  name  String?
-  password String?
+  phone String  @unique
+  name  String
+  password String
   role Role     @default(Guest)
   signatures Signature[]
 }

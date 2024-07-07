@@ -41,22 +41,26 @@ export class AdminController {
   }
 
   @Patch('post/:id')
-  updatePost(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
+  updatePost(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto, @Request() req) {
+    if (req.user.role !== 'Admin') throw new ForbiddenException('Not admin');
     return this.postService.update(+id, updatePostDto);
   }
 
   @Delete('post/:id')
-  removePost(@Param('id') id: string) {
+  removePost(@Param('id') id: string, @Request() req) {
+    if (req.user.role !== 'Admin') throw new ForbiddenException('Not admin');
     return this.postService.remove(+id);
   }
 
   @Patch('user/:id')
-  updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @Request() req) {
+    if (req.user.role !== 'Admin') throw new ForbiddenException('Not admin');
     return this.userService.update(+id, updateUserDto);
   }
 
   @Delete('user/:id')
-  removeUser(@Param('id') id: string) {
+  removeUser(@Param('id') id: string, @Request() req) {
+    if (req.user.role !== 'Admin') throw new ForbiddenException('Not admin');
     return this.userService.remove(+id);
   }
 }

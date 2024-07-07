@@ -1,6 +1,6 @@
 export class RegisterDto {
   name: string;
-  phone: bigint;
+  phone: string;
   password: string;
   repass: string;
 }

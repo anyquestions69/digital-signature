@@ -12,7 +12,6 @@ export class UserService {
       data: {
         phone: register.phone,
         name: register.name,
-        wallet: String(register.phone),
         password: hashedPassword,
       },
     });
@@ -25,8 +24,8 @@ export class UserService {
   findOne(id: number) {
     return this.prisma.user.findFirst({ where: { id } });
   }
-  findByPhone(phone: bigint) {
-    return this.prisma.user.findFirst({ where: { phone } });
+  findByPhone(phone: string) {
+    return this.prisma.user.findFirst({ where: { phone:phone } });
   }
   update(id: number, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;

@@ -1,4 +1,4 @@
 export class LoginDto {
-  phone: bigint;
+  phone: string;
   password: string;
 }

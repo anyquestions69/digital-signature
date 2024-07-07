@@ -16,7 +16,7 @@ export class AuthService {
     private rsa: EncryptionService,
     private usersService: UserService,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
   async register(register: RegisterDto) {
     const user = await this.usersService.findByPhone(register.phone);
     if (user) {
@@ -29,7 +29,7 @@ export class AuthService {
     }
     const reg = await this.usersService.create(register);
     const { publicKey } = await this.rsa.generateKeys(
-      String(register.phone),
+      register.phone,
       register.password,
     );
     const payload = { id: reg.id, phone: String(reg.phone), role: user.role };
@@ -55,7 +55,7 @@ export class AuthService {
   async profile(req) {
     const user = await this.usersService.findOne(req.user.userId);
     if (!user) throw new UnauthorizedException('Неверный номер телефона');
-    const {  name, role } = user
-    return { name, phone: String(user.phone), role }
+    const { password, ...data } = user;
+    return data;
   }
 }
