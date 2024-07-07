@@ -1,13 +1,26 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateSignatureDto } from './dto/create-signature.dto';
 import { UpdateSignatureDto } from './dto/update-signature.dto';
 import { PrismaService } from 'prisma/prisma.service';
+import { EncryptionService } from 'src/encryption/encryption.service';
+import { PostService } from 'src/post/post.service';
 
 @Injectable()
 export class SignatureService {
-  constructor(private prisma: PrismaService) { }
-  create(postId: number, file: Express.Multer.File, req) {
-   // return this.prisma.signature.create({ data: { postId: postId, userId: req.user.id } });
+  constructor(
+    private prisma: PrismaService,
+    private rsa: EncryptionService,
+    private postService: PostService,
+  ) {}
+  async create(postId: number, file: Express.Multer.File, req:Request) {
+    const key = Buffer.from(file.buffer).toLocaleString();
+    const post = await this.postService.findOne(postId);
+    if (!post) throw new BadRequestException('No such post');
+    return this.rsa.encrypt(post.title, key); //this.prisma.signature.create({ data: { postId: postId, userId: req.user.id } });
+  }
+
+  checkSignature(phone:string, hash:string){
+
   }
 
   findAll() {
@@ -18,11 +31,5 @@ export class SignatureService {
     return `This action returns a #${id} signature`;
   }
 
-  update(id: number, updateSignatureDto: UpdateSignatureDto) {
-    return `This action updates a #${id} signature`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} signature`;
-  }
+  
 }

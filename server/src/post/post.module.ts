@@ -9,5 +9,6 @@ import { EncryptionService } from 'src/encryption/encryption.service';
   imports: [PrismaModule, MulterModule],
   controllers: [PostController],
   providers: [PostService, EncryptionService],
+  exports:[PostService]
 })
 export class PostModule {}
