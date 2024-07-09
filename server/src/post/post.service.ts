@@ -21,11 +21,24 @@ export class PostService {
   }
 
   findAll() {
-    return this.prisma.post.findMany();
+    return this.prisma.post.findMany({
+      include: {
+        signatures: {
+          select: { hash: true, user: { select: { phone: true, name: true } } },
+        },
+      },
+    });
   }
 
   findOne(id: number) {
-    return this.prisma.post.findFirst({ where: { id: id } });
+    return this.prisma.post.findFirst({
+      include: {
+        signatures: {
+          select: { hash: true, user: { select: { phone: true, name: true } } },
+        },
+      },
+      where: { id: id },
+    });
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {

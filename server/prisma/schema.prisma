@@ -32,6 +32,7 @@ model Post {
 }
 
 model Signature {
+  hash  String
   post       Post     @relation(fields: [postId], references: [id])
   postId     Int
   user   User @relation(fields: [userId], references: [id])
