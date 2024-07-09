@@ -31,13 +31,21 @@ export class UserService {
     return this.prisma.user.findFirst({ where: { phone } });
   }
   update(id: number, updateUserDto: UpdateUserDto) {
-    return this.prisma.user.update({ data: updateUserDto, where: { id } });
+    return this.prisma.user.update({
+      data: updateUserDto,
+      where: { id },
+      omit: { password: true },
+    });
   }
   setAdmin(id: number) {
-    return this.prisma.user.update({ data: { role: 'Admin' }, where: { id } });
+    return this.prisma.user.update({
+      data: { role: 'Admin' },
+      where: { id },
+      omit: { password: true },
+    });
   }
 
   remove(id: number) {
-    return this.prisma.user.delete({ where: { id } });
+    return this.prisma.user.delete({ where: { id }, omit: { password: true } });
   }
 }

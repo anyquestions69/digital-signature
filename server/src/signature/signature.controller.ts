@@ -17,14 +17,13 @@ import { AuthGuard } from '@nestjs/passport';
 import { JwtStrategy } from 'src/auth/jwt.strategy';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
-@Controller('sign')
+@Controller()
 export class SignatureController {
   constructor(private readonly signatureService: SignatureService) {}
 
-  
   @UseInterceptors(FileInterceptor('file'))
   @UseGuards(JwtAuthGuard)
-  @Post(':postId')
+  @Post('sign/:postId')
   create(
     @Param('postId') postId: string,
     @UploadedFile() file: Express.Multer.File,
@@ -41,5 +40,9 @@ export class SignatureController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.signatureService.findOne(+id);
+  }
+  @Post('check')
+  check(@Body('phone') phone: string, @Body('hash') hash: string) {
+    return this.signatureService.checkSignature(phone, hash);
   }
 }

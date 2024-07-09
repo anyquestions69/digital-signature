@@ -9,7 +9,7 @@ export class EncryptionService {
     passphrase: string,
   ): Promise<{ publicKey: string }> {
     const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
-      modulusLength: 4096,
+      modulusLength: 2048,
       publicKeyEncoding: {
         type: 'spki',
         format: 'pem',
@@ -17,14 +17,12 @@ export class EncryptionService {
       privateKeyEncoding: {
         type: 'pkcs8',
         format: 'pem',
-        cipher: 'aes-256-cbc',
-        passphrase: passphrase,
       },
     });
     if (!fs.existsSync('./keys/' + phone)) {
       fs.mkdirSync('./keys/' + phone, { recursive: true });
       console.log(`Directory '${'./keys/' + phone}' created.`);
-    } 
+    }
     fs.writeFile('./keys/' + phone + '/private.pem', privateKey, (err) => {
       if (err) {
         console.error(`Failed to write file: ${err}`);
@@ -41,6 +39,13 @@ export class EncryptionService {
     });
     return { publicKey };
   }
+  checkSignature(phone: string, hash: string): string {
+    const res: string = fs
+      .readFileSync('./keys/' + phone + '/private.pem', 'utf8')
+      .toString();
+
+    return this.decrypt(hash, res);
+  }
   encrypt(data, publicKey: string) {
     const buffer = Buffer.from(data);
     const encrypted = crypto.publicEncrypt(publicKey, buffer);
@@ -48,7 +53,13 @@ export class EncryptionService {
   }
   decrypt(encryptedData, privateKey: string) {
     const buffer = Buffer.from(encryptedData, 'base64');
-    const decrypted = crypto.privateDecrypt(privateKey, buffer);
+    const decrypted = crypto.privateDecrypt(
+      {
+        key: privateKey,
+        padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
+      },
+      buffer,
+    );
     return decrypted.toString();
   }
 }

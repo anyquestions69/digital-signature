@@ -18,7 +18,7 @@ export class SignatureService {
   }
 
   checkSignature(phone:string, hash:string){
-
+    return this.rsa.checkSignature(phone, hash)
   }
 
   findAll() {
