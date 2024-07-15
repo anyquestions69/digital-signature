@@ -32,9 +32,9 @@ export class SignatureController {
     return this.signatureService.create(+postId, file, req);
   }
 
-  @Get()
-  findAll() {
-    return this.signatureService.findAll();
+  @Get('post/:id')
+  findAll(@Param('id') id: string) {
+    return this.signatureService.findAll(+id);
   }
 
   @Get(':id')
