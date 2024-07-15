@@ -14,9 +14,8 @@ export class SignatureService {
     const key = Buffer.from(file.buffer).toLocaleString();
     const post = await this.postService.findOne(postId);
     if (!post) throw new BadRequestException('No such post');
-    const hash = await this.rsa.encrypt(post.title, key);
-    const check = await this.checkSignature(req.user.phone, hash);
-    console.log(check);
+    const hash = this.rsa.encrypt(post.title, key);
+    const check = this.checkSignature(req.user.phone, hash);
     if (check != post.title) throw new BadRequestException('Неверный ключ!');
     const sig = await this.prisma.post.update({
       where: { id: post.id },
