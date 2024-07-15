@@ -37,10 +37,6 @@ export class SignatureController {
     return this.signatureService.findAll(+id);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.signatureService.findOne(+id);
-  }
   @Post('check')
   check(@Body('phone') phone: string, @Body('hash') hash: string) {
     return this.signatureService.checkSignature(phone, hash);

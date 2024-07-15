@@ -42,7 +42,4 @@ export class SignatureService {
     });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} signature`;
-  }
 }
