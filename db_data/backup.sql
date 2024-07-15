@@ -20,18 +20,18 @@ SET row_security = off;
 
 --
 -- TOC entry 5 (class 2615 OID 34604)
--- Name: public; Type: SCHEMA; Schema: -; Owner: public_hysteria
+-- Name: public; Type: SCHEMA; Schema: -; Owner: postgres
 --
 
 -- *not* creating schema, since initdb creates it
 
 
-ALTER SCHEMA public OWNER TO public_hysteria;
+ALTER SCHEMA public OWNER TO postgres;
 
 --
 -- TOC entry 3698 (class 0 OID 0)
 -- Dependencies: 5
--- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: public_hysteria
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
 --
 
 COMMENT ON SCHEMA public IS '';
@@ -39,7 +39,7 @@ COMMENT ON SCHEMA public IS '';
 
 --
 -- TOC entry 848 (class 1247 OID 34615)
--- Name: Role; Type: TYPE; Schema: public; Owner: public_hysteria
+-- Name: Role; Type: TYPE; Schema: public; Owner: postgres
 --
 
 CREATE TYPE public."Role" AS ENUM (
@@ -48,7 +48,7 @@ CREATE TYPE public."Role" AS ENUM (
 );
 
 
-ALTER TYPE public."Role" OWNER TO public_hysteria;
+ALTER TYPE public."Role" OWNER TO postgres;
 
 SET default_tablespace = '';
 
@@ -56,7 +56,7 @@ SET default_table_access_method = heap;
 
 --
 -- TOC entry 219 (class 1259 OID 34629)
--- Name: Post; Type: TABLE; Schema: public; Owner: public_hysteria
+-- Name: Post; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public."Post" (
@@ -67,11 +67,11 @@ CREATE TABLE public."Post" (
 );
 
 
-ALTER TABLE public."Post" OWNER TO public_hysteria;
+ALTER TABLE public."Post" OWNER TO postgres;
 
 --
 -- TOC entry 218 (class 1259 OID 34628)
--- Name: Post_id_seq; Type: SEQUENCE; Schema: public; Owner: public_hysteria
+-- Name: Post_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE public."Post_id_seq"
@@ -83,12 +83,12 @@ CREATE SEQUENCE public."Post_id_seq"
     CACHE 1;
 
 
-ALTER SEQUENCE public."Post_id_seq" OWNER TO public_hysteria;
+ALTER SEQUENCE public."Post_id_seq" OWNER TO postgres;
 
 --
 -- TOC entry 3700 (class 0 OID 0)
 -- Dependencies: 218
--- Name: Post_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: public_hysteria
+-- Name: Post_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public."Post_id_seq" OWNED BY public."Post".id;
@@ -96,7 +96,7 @@ ALTER SEQUENCE public."Post_id_seq" OWNED BY public."Post".id;
 
 --
 -- TOC entry 220 (class 1259 OID 34637)
--- Name: Signature; Type: TABLE; Schema: public; Owner: public_hysteria
+-- Name: Signature; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public."Signature" (
@@ -107,11 +107,11 @@ CREATE TABLE public."Signature" (
 );
 
 
-ALTER TABLE public."Signature" OWNER TO public_hysteria;
+ALTER TABLE public."Signature" OWNER TO postgres;
 
 --
 -- TOC entry 217 (class 1259 OID 34620)
--- Name: User; Type: TABLE; Schema: public; Owner: public_hysteria
+-- Name: User; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public."User" (
@@ -123,11 +123,11 @@ CREATE TABLE public."User" (
 );
 
 
-ALTER TABLE public."User" OWNER TO public_hysteria;
+ALTER TABLE public."User" OWNER TO postgres;
 
 --
 -- TOC entry 216 (class 1259 OID 34619)
--- Name: User_id_seq; Type: SEQUENCE; Schema: public; Owner: public_hysteria
+-- Name: User_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE public."User_id_seq"
@@ -139,12 +139,12 @@ CREATE SEQUENCE public."User_id_seq"
     CACHE 1;
 
 
-ALTER SEQUENCE public."User_id_seq" OWNER TO public_hysteria;
+ALTER SEQUENCE public."User_id_seq" OWNER TO postgres;
 
 --
 -- TOC entry 3701 (class 0 OID 0)
 -- Dependencies: 216
--- Name: User_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: public_hysteria
+-- Name: User_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public."User_id_seq" OWNED BY public."User".id;
@@ -152,7 +152,7 @@ ALTER SEQUENCE public."User_id_seq" OWNED BY public."User".id;
 
 --
 -- TOC entry 215 (class 1259 OID 34605)
--- Name: _prisma_migrations; Type: TABLE; Schema: public; Owner: public_hysteria
+-- Name: _prisma_migrations; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public._prisma_migrations (
@@ -167,11 +167,11 @@ CREATE TABLE public._prisma_migrations (
 );
 
 
-ALTER TABLE public._prisma_migrations OWNER TO public_hysteria;
+ALTER TABLE public._prisma_migrations OWNER TO postgres;
 
 --
 -- TOC entry 3531 (class 2604 OID 34632)
--- Name: Post id; Type: DEFAULT; Schema: public; Owner: public_hysteria
+-- Name: Post id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public."Post" ALTER COLUMN id SET DEFAULT nextval('public."Post_id_seq"'::regclass);
@@ -179,7 +179,7 @@ ALTER TABLE ONLY public."Post" ALTER COLUMN id SET DEFAULT nextval('public."Post
 
 --
 -- TOC entry 3529 (class 2604 OID 34623)
--- Name: User id; Type: DEFAULT; Schema: public; Owner: public_hysteria
+-- Name: User id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public."User" ALTER COLUMN id SET DEFAULT nextval('public."User_id_seq"'::regclass);
@@ -188,7 +188,7 @@ ALTER TABLE ONLY public."User" ALTER COLUMN id SET DEFAULT nextval('public."User
 --
 -- TOC entry 3691 (class 0 OID 34629)
 -- Dependencies: 219
--- Data for Name: Post; Type: TABLE DATA; Schema: public; Owner: public_hysteria
+-- Data for Name: Post; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public."Post" (id, title, filename, hash) FROM stdin;
@@ -199,7 +199,7 @@ COPY public."Post" (id, title, filename, hash) FROM stdin;
 --
 -- TOC entry 3692 (class 0 OID 34637)
 -- Dependencies: 220
--- Data for Name: Signature; Type: TABLE DATA; Schema: public; Owner: public_hysteria
+-- Data for Name: Signature; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public."Signature" ("postId", "userId", "assignedAt", hash) FROM stdin;
@@ -211,7 +211,7 @@ COPY public."Signature" ("postId", "userId", "assignedAt", hash) FROM stdin;
 --
 -- TOC entry 3689 (class 0 OID 34620)
 -- Dependencies: 217
--- Data for Name: User; Type: TABLE DATA; Schema: public; Owner: public_hysteria
+-- Data for Name: User; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public."User" (id, phone, name, role, password) FROM stdin;
@@ -224,7 +224,7 @@ COPY public."User" (id, phone, name, role, password) FROM stdin;
 --
 -- TOC entry 3687 (class 0 OID 34605)
 -- Dependencies: 215
--- Data for Name: _prisma_migrations; Type: TABLE DATA; Schema: public; Owner: public_hysteria
+-- Data for Name: _prisma_migrations; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public._prisma_migrations (id, checksum, finished_at, migration_name, logs, rolled_back_at, started_at, applied_steps_count) FROM stdin;
@@ -240,7 +240,7 @@ cc5da2b6-7116-425b-a3f7-eed24e313854	e782521454374a8445e9dfae7c698e28a26ddc4b75d
 --
 -- TOC entry 3702 (class 0 OID 0)
 -- Dependencies: 218
--- Name: Post_id_seq; Type: SEQUENCE SET; Schema: public; Owner: public_hysteria
+-- Name: Post_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public."Post_id_seq"', 2, true);
@@ -249,7 +249,7 @@ SELECT pg_catalog.setval('public."Post_id_seq"', 2, true);
 --
 -- TOC entry 3703 (class 0 OID 0)
 -- Dependencies: 216
--- Name: User_id_seq; Type: SEQUENCE SET; Schema: public; Owner: public_hysteria
+-- Name: User_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public."User_id_seq"', 4, true);
@@ -257,7 +257,7 @@ SELECT pg_catalog.setval('public."User_id_seq"', 4, true);
 
 --
 -- TOC entry 3539 (class 2606 OID 34636)
--- Name: Post Post_pkey; Type: CONSTRAINT; Schema: public; Owner: public_hysteria
+-- Name: Post Post_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public."Post"
@@ -266,7 +266,7 @@ ALTER TABLE ONLY public."Post"
 
 --
 -- TOC entry 3541 (class 2606 OID 34644)
--- Name: Signature Signature_pkey; Type: CONSTRAINT; Schema: public; Owner: public_hysteria
+-- Name: Signature Signature_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public."Signature"
@@ -275,7 +275,7 @@ ALTER TABLE ONLY public."Signature"
 
 --
 -- TOC entry 3537 (class 2606 OID 34627)
--- Name: User User_pkey; Type: CONSTRAINT; Schema: public; Owner: public_hysteria
+-- Name: User User_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public."User"
@@ -284,7 +284,7 @@ ALTER TABLE ONLY public."User"
 
 --
 -- TOC entry 3534 (class 2606 OID 34613)
--- Name: _prisma_migrations _prisma_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: public_hysteria
+-- Name: _prisma_migrations _prisma_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public._prisma_migrations
@@ -293,7 +293,7 @@ ALTER TABLE ONLY public._prisma_migrations
 
 --
 -- TOC entry 3535 (class 1259 OID 34750)
--- Name: User_phone_key; Type: INDEX; Schema: public; Owner: public_hysteria
+-- Name: User_phone_key; Type: INDEX; Schema: public; Owner: postgres
 --
 
 CREATE UNIQUE INDEX "User_phone_key" ON public."User" USING btree (phone);
@@ -301,7 +301,7 @@ CREATE UNIQUE INDEX "User_phone_key" ON public."User" USING btree (phone);
 
 --
 -- TOC entry 3542 (class 2606 OID 34647)
--- Name: Signature Signature_postId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: public_hysteria
+-- Name: Signature Signature_postId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public."Signature"
@@ -310,7 +310,7 @@ ALTER TABLE ONLY public."Signature"
 
 --
 -- TOC entry 3543 (class 2606 OID 34652)
--- Name: Signature Signature_userId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: public_hysteria
+-- Name: Signature Signature_userId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public."Signature"
@@ -320,7 +320,7 @@ ALTER TABLE ONLY public."Signature"
 --
 -- TOC entry 3699 (class 0 OID 0)
 -- Dependencies: 5
--- Name: SCHEMA public; Type: ACL; Schema: -; Owner: public_hysteria
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
 --
 
 REVOKE USAGE ON SCHEMA public FROM PUBLIC;
