@@ -7,9 +7,10 @@ import { SignatureModule } from './signature/signature.module';
 import { EncryptionService } from './encryption/encryption.service';
 import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [UserModule, PostModule, SignatureModule, AuthModule, AdminModule],
+  imports: [UserModule, PostModule, SignatureModule, AuthModule, AdminModule,ConfigModule.forRoot()],
   controllers: [AppController],
   providers: [AppService, EncryptionService],
 })
