@@ -34,6 +34,8 @@ export class SignatureService {
         },
       },
     });
+    console.log(post.signatures.length)
+    console.log(await this.prisma.user.count())
     if(post.signatures.length==await this.prisma.user.count()){
       this.stampService.CreateStamp({filename:post.filename})
     }
