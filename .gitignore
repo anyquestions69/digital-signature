@@ -4,3 +4,4 @@ node_modules
 server/keys/*
 server/files/*.
 venv
+.venv

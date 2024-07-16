@@ -38,6 +38,14 @@ services:
     volumes:
       - ./nginx:/etc/nginx/conf.d
     restart: always
+  stamp:
+    build: 
+      context: ./sign_service
+    volumes:
+      - files:/service/dist
+    expose:
+      - '50051:50051'
+    command: python3 /service/main.py
   # client:  
   #   build:
   #     context: ./client

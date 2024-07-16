@@ -13,4 +13,3 @@ message Req {
 message Res {
   string message = 1;
 }
-option py_generic_services = true;

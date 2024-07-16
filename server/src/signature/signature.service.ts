@@ -1,15 +1,22 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { EncryptionService } from 'src/encryption/encryption.service';
 import { PostService } from 'src/post/post.service';
+import {StampClientImpl} from 'file'
+import * as grpc from '@grpc/grpc-js';
+import { ClientGrpc } from '@nestjs/microservices';
 
 @Injectable()
 export class SignatureService {
+  private stampService:StampClientImpl
   constructor(
     private prisma: PrismaService,
     private rsa: EncryptionService,
     private postService: PostService,
-  ) {}
+    @Inject('STAMP_PACKAGE') private client: ClientGrpc
+  ) {
+    this.stampService = this.client.getService<StampClientImpl>('Stamp');
+  }
   async create(postId: number, file: Express.Multer.File, req) {
     const key = Buffer.from(file.buffer).toLocaleString();
     const post = await this.postService.findOne(postId);
@@ -27,6 +34,9 @@ export class SignatureService {
         },
       },
     });
+    if(post.signatures.length==await this.prisma.user.count()){
+      this.stampService.CreateStamp({filename:post.filename})
+    }
     return sig;
   }
 
