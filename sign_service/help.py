@@ -43,6 +43,6 @@ def move_image_down(input_path, output_path, offset):
     print(f"Изображение успешно перемещено. Сохранено в {output_path}")
 
 if __name__ == "__main__":
-    move_image_down("C:\\Users\\ilya\\Desktop\\projects\\FS_course\\stamp\\assets\\stamp.pdf",
-                    "C:\\Users\\ilya\\Desktop\\projects\\FS_course\\stamp\\dist\\output_with_moved_image.pdf",
+    move_image_down("assets/stamp.pdf",
+                    "dist/output_with_moved_image.pdf",
                     100)  # Смещение вниз на 100 единиц

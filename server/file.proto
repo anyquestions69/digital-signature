@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package stamp;
+
+service Stamp {
+  rpc CreateStamp (Req) returns (Res);
+}
+
+message Req {
+  string filename = 1;
+}
+
+message Res {
+  string message = 1;
+}

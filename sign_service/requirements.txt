@@ -1,2 +1,5 @@
 PyPDF2
 reportlab
+grpcio 
+protobuf
+Flask

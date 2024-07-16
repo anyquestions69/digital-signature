@@ -3,7 +3,7 @@ from PyPDF2.generic import RectangleObject
 import time
 
 
-def create_stamp(input_path, stamp_path, output_path):
+def create_stamp(input_path, stamp_path="assets/stamp.pdf"):
     image_reader = pypdf.PdfReader(stamp_path)
     image_page = image_reader.pages[0]
 
@@ -22,14 +22,13 @@ def create_stamp(input_path, stamp_path, output_path):
 
     writer.add_page(content_page)
 
-    with open(output_path, "wb") as fp:
+    with open(input_path, "wb") as fp:
         writer.write(fp)
 
-    print(f"Штамп успешно добавлен. Сохранено в {output_path}")
+    print(f"Штамп успешно добавлен. Сохранено в {input_path}")
 
 
 if __name__ == "__main__":
-    create_stamp("C:\\Users\\ilya\\Desktop\\projects\\FS_course\\stamp\\assets\\2.pdf",
-                 "C:\\Users\\ilya\\Desktop\\projects\\FS_course\\stamp\\assets\\stamp.pdf",
-                 f"C:\\Users\\ilya\\Desktop\\projects\\FS_course\\stamp\\dist\\output_with_stamp{time.time()}.pdf")
+    create_stamp("assets/2.pdf",
+                 "assets/stamp.pdf")
 

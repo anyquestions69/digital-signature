@@ -10,7 +10,7 @@ import { AdminModule } from './admin/admin.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [UserModule, PostModule, SignatureModule, AuthModule, AdminModule,ConfigModule.forRoot()],
+  imports: [UserModule, PostModule, SignatureModule, AuthModule, AdminModule,ConfigModule.forRoot(),],
   controllers: [AppController],
   providers: [AppService, EncryptionService],
 })
