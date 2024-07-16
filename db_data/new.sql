@@ -2,10 +2,10 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 16.2 (Homebrew)
--- Dumped by pg_dump version 16.3 (Homebrew)
+-- Dumped from database version 16.3 (Homebrew)
+-- Dumped by pg_dump version 16.3
 
--- Started on 2024-07-16 00:51:33 MSK
+-- Started on 2024-07-17 00:24:52 MSK
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -234,6 +234,7 @@ COPY public._prisma_migrations (id, checksum, finished_at, migration_name, logs,
 2b47d72f-0f98-4e43-b0d1-bef8da21d399	c281f2947dd9960d6f02f3ce9994beb5765a9d7ae61a39947f271d5d0a4e465e	2024-07-07 23:51:31.155802+03	20240706233313_signature_fix	\N	\N	2024-07-07 23:51:31.154389+03	1
 a6b709c7-df48-4bcd-9bb2-b3385de70378	f165c63cc236e8134f8b965a5125f5a8d10710d56ff1faa27f8a1489b70b8fac	2024-07-07 23:51:38.733037+03	20240707205138_upd	\N	\N	2024-07-07 23:51:38.726934+03	1
 cc5da2b6-7116-425b-a3f7-eed24e313854	e782521454374a8445e9dfae7c698e28a26ddc4b75d2f68f0fa034e65a7b0d0b	2024-07-09 23:58:13.353338+03	20240709205813_upd_sig	\N	\N	2024-07-09 23:58:13.349754+03	1
+56497071-92e5-496f-b6e8-4163df7d6ffc	888c2260b2417ec01ce01ec8c59e48bc1145ed5d3cababfb992d8190bac7d1cf	2024-07-17 00:23:19.089797+03	20240716212319_cascade	\N	\N	2024-07-17 00:23:19.079318+03	1
 \.
 
 
@@ -300,21 +301,21 @@ CREATE UNIQUE INDEX "User_phone_key" ON public."User" USING btree (phone);
 
 
 --
--- TOC entry 3542 (class 2606 OID 34647)
+-- TOC entry 3542 (class 2606 OID 37510)
 -- Name: Signature Signature_postId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public."Signature"
-    ADD CONSTRAINT "Signature_postId_fkey" FOREIGN KEY ("postId") REFERENCES public."Post"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+    ADD CONSTRAINT "Signature_postId_fkey" FOREIGN KEY ("postId") REFERENCES public."Post"(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
--- TOC entry 3543 (class 2606 OID 34652)
+-- TOC entry 3543 (class 2606 OID 37515)
 -- Name: Signature Signature_userId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public."Signature"
-    ADD CONSTRAINT "Signature_userId_fkey" FOREIGN KEY ("userId") REFERENCES public."User"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+    ADD CONSTRAINT "Signature_userId_fkey" FOREIGN KEY ("userId") REFERENCES public."User"(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -326,7 +327,7 @@ ALTER TABLE ONLY public."Signature"
 REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 
 
--- Completed on 2024-07-16 00:51:33 MSK
+-- Completed on 2024-07-17 00:24:52 MSK
 
 --
 -- PostgreSQL database dump complete
