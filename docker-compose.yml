@@ -43,7 +43,7 @@ services:
       context: ./sign_service
     volumes:
       - files:/service/dist
-    expose:
+    ports:
       - '50051:50051'
     command: python3 /service/main.py
   # client:  
