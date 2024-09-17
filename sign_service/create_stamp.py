@@ -24,11 +24,11 @@ def create_stamp(input_path, stamp_path="assets/stamp.pdf"):
 
         writer.add_page(content_page)
     
-        with open("dist/new.pdf", "wb") as fp:
+        with open("edited/"+input_path, "wb") as fp:
             writer.write(fp)
 
-        print(f"Штамп успешно добавлен. Сохранено в {input_path}")
-        return  "Success"
+            print(f"Штамп успешно добавлен. Сохранено в {input_path}")
+            return  fp
     except Exception:
         print(Exception)
         return "Error"
