@@ -5,14 +5,15 @@ import time
 
 def create_stamp(input_path, stamp_path="assets/stamp.pdf"):
     try:
-        input_path="dist/"+input_path
+        #input_path="dist/"+input_path
         image_reader = pypdf.PdfReader(stamp_path)
         image_page = image_reader.pages[0]
 
         content_reader = pypdf.PdfReader(input_path)
+        print(content_reader)
         content_page = content_reader.pages[-1]
         mediabox = content_page.mediabox
-
+        
         content_page.merge_page(image_page)
         content_page.mediabox = mediabox
 
@@ -21,14 +22,14 @@ def create_stamp(input_path, stamp_path="assets/stamp.pdf"):
         for page_num in range(len(content_reader.pages) - 1):
             page = content_reader.pages[page_num]
             writer.add_page(page)
-
+        
         writer.add_page(content_page)
-    
-        with open("edited/"+input_path, "wb") as fp:
-            writer.write(fp)
 
+        with open('assets/1.pdf', "wb") as fp:
+            writer.write(fp)
             print(f"Штамп успешно добавлен. Сохранено в {input_path}")
-            return  fp
+            print(fp)
+            return  input_path
     except Exception:
         print(Exception)
         return "Error"
