@@ -5,7 +5,7 @@
 -- Dumped from database version 16.3 (Homebrew)
 -- Dumped by pg_dump version 16.3
 
--- Started on 2024-09-18 21:47:46 MSK
+-- Started on 2024-09-18 23:25:13 MSK
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -349,7 +349,7 @@ ALTER TABLE ONLY public."Signature"
 REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 
 
--- Completed on 2024-09-18 21:47:46 MSK
+-- Completed on 2024-09-18 23:25:13 MSK
 
 --
 -- PostgreSQL database dump complete
