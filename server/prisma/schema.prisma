@@ -29,6 +29,7 @@ model Post {
   filename String
   hash  String
   signatures  Signature[]
+  delivered Boolean @default(false)
 }
 
 model Signature {

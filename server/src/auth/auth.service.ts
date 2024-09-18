@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  StreamableFile,
   UnauthorizedException,
 } from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
@@ -10,6 +11,9 @@ import { JwtService } from '@nestjs/jwt';
 import { EncryptionService } from 'src/encryption/encryption.service';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
+import { createReadStream } from 'fs';
+import * as fs from 'fs';
+import { join } from 'path';
 @Injectable()
 export class AuthService {
   constructor(
@@ -33,10 +37,9 @@ export class AuthService {
       register.password,
     );
     const payload = { id: reg.id, phone: String(reg.phone), role: reg.role };
-    return {
-      access_token: await this.jwtService.signAsync(payload),
-      publicKey,
-    };
+    await this.jwtService.signAsync(payload);
+    const file = createReadStream('./keys/' + register.phone + '/public.pem');
+    return new StreamableFile(file);
   }
 
   async login(loginDto: LoginDto) {

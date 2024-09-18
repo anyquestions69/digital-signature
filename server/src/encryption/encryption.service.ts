@@ -23,20 +23,8 @@ export class EncryptionService {
       fs.mkdirSync('./keys/' + phone, { recursive: true });
       console.log(`Directory '${'./keys/' + phone}' created.`);
     }
-    fs.writeFile('./keys/' + phone + '/private.pem', privateKey, (err) => {
-      if (err) {
-        console.error(`Failed to write file: ${err}`);
-      } else {
-        console.log('File written successfully.');
-      }
-    });
-    fs.writeFile('./keys/' + phone + '/public.pem', publicKey, (err) => {
-      if (err) {
-        console.error(`Failed to write file: ${err}`);
-      } else {
-        console.log('File written successfully.');
-      }
-    });
+    fs.writeFileSync('./keys/' + phone + '/private.pem', privateKey);
+    fs.writeFileSync('./keys/' + phone + '/public.pem', publicKey);
     return { publicKey };
   }
   checkSignature(phone: string, hash: string): string {
