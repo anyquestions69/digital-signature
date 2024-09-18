@@ -37,9 +37,9 @@ export class SignatureService {
     console.log(await this.prisma.signature.count({where:{postId:post.id}}))
     console.log(await this.prisma.user.count())
     if(await this.prisma.signature.count({where:{postId:post.id}})==(await this.prisma.user.count())){
-      console.log('grpc res:')
-      const res=await this.stampService.CreateStamp({filename:post.filename})
-      console.log(res.message)
+      console.log('Все расписались. Приказ доведен:')
+     // const res=await this.stampService.CreateStamp({filename:post.filename})
+      //console.log(res.message)
     }
     return sig;
   }

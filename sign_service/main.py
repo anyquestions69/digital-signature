@@ -9,7 +9,7 @@ class StampService(file_pb2_grpc.StampServicer):
         print(request)
         res=create_stamp.create_stamp(request.filename)
         print(res)
-        return file_pb2.Res(message=res)
+        return file_pb2.Res(message='done')
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
@@ -19,4 +19,6 @@ def serve():
     print('service started')
     server.wait_for_termination()
 print('starting...')
-serve()
+#serve()
+res=create_stamp.create_stamp('c:\\Users\\User\\Downloads\\1111.pdf')
+#print(res)

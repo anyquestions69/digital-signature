@@ -10,6 +10,7 @@ services:
     env_file: .env
     volumes:
       - files:/app/files
+      - stamped_files:/app/stamped_files
   db:
     image: postgres
     restart: always
@@ -43,6 +44,7 @@ services:
       context: ./sign_service
     volumes:
       - files:/service/dist
+      - stamped_files:/service/edited
     ports:
       - '50051:50051'
     command: python3 /service/main.py
@@ -69,3 +71,4 @@ services:
     restart: always  
 volumes:
   files:
+  stamped_files:
