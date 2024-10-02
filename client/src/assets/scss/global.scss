@@ -1,0 +1,77 @@
+@import "vars";
+@import "mixins";
+@import "fonts";
+
+
+::selection {
+    background: $background-selection-color;
+    color: $font-selection-color;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: $main-font-color;
+    border-color: #1db0cd;
+    background: $main-background-color;
+    font-family: "Comfortaa";
+}
+
+#app {
+    height: 100dvh;
+    font-size: 1rem;
+    overflow-x: hidden;
+}
+
+input,
+textarea,
+select {
+    outline: none;
+}
+
+input,
+textarea,
+select{
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+button {
+    cursor: pointer;
+}
+
+input,
+textarea {
+    font-size: 18px;
+}
+
+a {
+    text-decoration: none;
+}
+
+ul {
+    list-style: none;
+}
+
+.box {
+    width: 100%;
+    padding-inline: 10%;
+
+    @media ( max-width: 1280px  ) {
+        padding-inline: 7%;
+    }
+
+    @media ( max-width: 1160px  ) {
+        padding-inline: 4%;
+    }
+}
+
+canvas {
+    display: none;
+}
+
+img {
+    user-select: none;
+}
