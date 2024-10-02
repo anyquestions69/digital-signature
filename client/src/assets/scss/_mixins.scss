@@ -1,0 +1,47 @@
+@mixin Title {
+    font-size: 1.8em;
+    line-height: 32px;
+    font-weight: 600;
+    letter-spacing: -1px;
+}
+
+@mixin Flex( $f_dir: column, $j_con: center, $a_ite: center ) {
+    display: flex;
+    flex-direction: $f_dir;
+    justify-content: $j_con;
+    align-items: $a_ite;
+}
+
+@mixin FlexRow( $j_pos: space-between, $a_pos: center ) {
+    display: flex;
+    flex-direction: row;
+    justify-content: $j_pos;
+    align-items: $a_pos;
+}
+
+@mixin ItemLink( $translate: 10px, $color: #1dc7cd ) {
+    @include FlexRow( center );
+    gap: 10px;
+
+    p {
+        font-size: 16px;
+    }
+
+    svg {
+        width: 14px;
+        height: auto;
+        transition: all 0.5s ease;
+        translate: 0 1px;
+
+        path {
+            fill: $color;
+        }
+
+    }
+
+    &:hover {
+        svg {
+            translate: $translate 1px;
+        }
+    }
+}

@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
+import { ServeStaticModule } from '@nestjs/serve-static'
+import { join } from 'path'
 import { AdminModule } from './admin/admin.module'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
@@ -16,7 +18,11 @@ import { UserModule } from './user/user.module'
 		SignatureModule,
 		AuthModule,
 		AdminModule,
-		ConfigModule.forRoot()
+		ConfigModule.forRoot(),
+		ServeStaticModule.forRoot({
+			rootPath: join(__dirname, '..', '../../client/dist'),
+			serveRoot: '/client'
+		})
 	],
 	controllers: [AppController],
 	providers: [AppService, EncryptionService]
