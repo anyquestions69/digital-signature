@@ -37,9 +37,22 @@ export class AuthService {
 			username: String(reg.username),
 			role: reg.role
 		}
-		await this.jwtService.signAsync(payload)
+
 		const file = createReadStream('./keys/' + register.username + '/public.pem')
-		return new StreamableFile(file)
+		const res = new StreamableFile(file)
+		let publicKeyText = ''
+
+		const reader = res.getStream()
+		reader.on('data', chunk => {
+			publicKeyText += chunk.toString()
+		})
+		await new Promise(resolve => {
+			reader.on('end', resolve)
+		})
+		return {
+			key: publicKeyText,
+			token: await this.jwtService.signAsync(payload)
+		}
 	}
 
 	async login(loginDto: LoginDto) {
