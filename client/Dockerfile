@@ -6,9 +6,7 @@ COPY . .
 RUN npm i --force
 #RUN npx prisma migrate dev "init"
 #RUN npm run build
-
-RUN npm rebuild bcrypt --build-from-source
-EXPOSE 3000
+EXPOSE 443
 
 # Command to run the application
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "dev"]
