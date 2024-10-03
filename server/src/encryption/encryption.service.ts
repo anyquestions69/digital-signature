@@ -28,11 +28,17 @@ export class EncryptionService {
     return { publicKey };
   }
   checkSignature(phone: string, hash: string): string {
-    const res: string = fs
+    try {
+      const res: string = fs
       .readFileSync('./keys/' + phone + '/private.pem', 'utf8')
       .toString();
 
     return this.decrypt(hash, res);
+    } catch (error) {
+      throw new Error("Не удалось проверить подпись");
+      
+    }
+
   }
   encrypt(data, publicKey: string) {
     const buffer = Buffer.from(data);
