@@ -17,7 +17,7 @@ export class SignatureService {
 		const post = await this.postService.findOne(postId)
 		if (!post) throw new BadRequestException('No such post')
 		const hash = this.rsa.encrypt(post.title, key)
-		const check = this.rsa.checkSignature(req.user.phone, hash)
+		const check = this.rsa.checkSignature(req.user.username, hash)
 		if (check != post.title) throw new BadRequestException('Неверный ключ!')
 		const sig = await this.prisma.post.update({
 			where: { id: post.id },
@@ -49,8 +49,8 @@ export class SignatureService {
 		}
 		return sig
 	}
-	checkSignature(phone, hash) {
-		this.rsa.checkSignature(phone, hash)
+	checkSignature(username, hash) {
+		this.rsa.checkSignature(username, hash)
 	}
 	findAll(id: number) {
 		return this.prisma.signature.findMany({

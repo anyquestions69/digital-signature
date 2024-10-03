@@ -3,11 +3,12 @@
         <div class="body__header">
             <a :class="`personal-info ${ isInfoType ? '' : 'un' }active`" @click="infoSearch">Личная информация</a>
             <a :class="`chat ${ !isInfoType ? '' : 'un' }active`" @click="chatSearch">Чат</a>
+            <a>Подать на подпись</a>
         </div>
         <div class="body__content">
             <div v-if="isInfoType" class="content__user-info">
                 <h1>Личная информация</h1>
-                
+
             </div>
             <div v-else class="content__chat" title="В разработке"></div>
         </div>
