@@ -20,7 +20,7 @@ export class AuthService {
 		private readonly jwtService: JwtService
 	) {}
 	async register(register: RegisterDto) {
-		const user = await this.usersService.findByPhone(register.phone)
+		const user = await this.usersService.findByUsername(register.username)
 		if (user) {
 			throw new ConflictException('Пользователь с таким номером уже существует')
 		}
@@ -29,24 +29,32 @@ export class AuthService {
 		}
 		const reg = await this.usersService.create(register)
 		const { publicKey } = await this.rsa.generateKeys(
-			register.phone,
+			register.username,
 			register.password
 		)
-		const payload = { id: reg.id, phone: String(reg.phone), role: reg.role }
+		const payload = {
+			id: reg.id,
+			username: String(reg.username),
+			role: reg.role
+		}
 		await this.jwtService.signAsync(payload)
-		const file = createReadStream('./keys/' + register.phone + '/public.pem')
+		const file = createReadStream('./keys/' + register.username + '/public.pem')
 		return new StreamableFile(file)
 	}
 
 	async login(loginDto: LoginDto) {
-		const user = await this.usersService.findByPhone(loginDto.phone)
+		const user = await this.usersService.findByUsername(loginDto.username)
 		if (!user) throw new UnauthorizedException('Неверный номер телефона')
 		const isValid = await bcrypt.compare(loginDto.password, user.password)
 
 		if (!isValid) {
 			throw new UnauthorizedException('Неверный пароль')
 		}
-		const payload = { id: user.id, phone: String(user.phone), role: user.role }
+		const payload = {
+			id: user.id,
+			username: String(user.username),
+			role: user.role
+		}
 		return {
 			access_token: await this.jwtService.signAsync(payload)
 		}

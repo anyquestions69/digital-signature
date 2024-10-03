@@ -77,18 +77,23 @@ const downPasswordInput = () => {
 const changeMode = () => {
 	isReg.value = !isReg.value
 }
-
+//TODO:
+// поля для ввода репаса и имени
 const regUser = (username: string, password: string) => {
 	AuthStore.regUser({
 		username: username,
-		password: password
+		password: password,
+		repass: password,
+		name: username
 	})
 }
 
 const loginUser = (username: string, password: string) => {
 	AuthStore.loginUser({
 		username: username,
-		password: password
+		password: password,
+		repass: password,
+		name: username
 	})
 }
 </script>

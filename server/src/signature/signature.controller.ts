@@ -34,7 +34,7 @@ export class SignatureController {
 	}
 
 	@Post('check')
-	check(@Body('phone') phone: string, @Body('hash') hash: string) {
-		return this.signatureService.checkSignature(phone, hash)
+	check(@Body('username') username: string, @Body('hash') hash: string) {
+		return this.signatureService.checkSignature(username, hash)
 	}
 }

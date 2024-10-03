@@ -36,7 +36,7 @@ export class PostService {
 					signatures: {
 						select: {
 							hash: true,
-							user: { select: { phone: true, name: true } }
+							user: { select: { username: true, name: true } }
 						}
 					}
 				}
@@ -53,7 +53,7 @@ export class PostService {
 					signatures: {
 						select: {
 							hash: true,
-							user: { select: { phone: true, name: true } }
+							user: { select: { username: true, name: true } }
 						}
 					}
 				},
