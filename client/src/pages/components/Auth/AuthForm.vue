@@ -38,17 +38,22 @@
 				}}</label>
 				<a @click="changeMode">{{ `${isReg ? 'Войти' : 'Регистрация'}` }}</a>
 			</div>
-			<button type="button" v-if="isReg">Зарегистрироваться</button>
-			<button type="button" v-else>Войти</button>
+			<button type="button" v-if="isReg" @click="regUser(username, password)">
+				Зарегистрироваться
+			</button>
+			<button type="button" v-else @click="loginUser(username, password)">
+				Войти
+			</button>
 		</form>
 	</div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { authStore } from '../../../store/authStore.ts'
 
 const isReg = ref(true)
-
+const AuthStore = authStore()
 const username = ref('')
 const password = ref('')
 
@@ -71,6 +76,20 @@ const downPasswordInput = () => {
 
 const changeMode = () => {
 	isReg.value = !isReg.value
+}
+
+const regUser = (username: string, password: string) => {
+	AuthStore.regUser({
+		username: username,
+		password: password
+	})
+}
+
+const loginUser = (username: string, password: string) => {
+	AuthStore.loginUser({
+		username: username,
+		password: password
+	})
 }
 </script>
 
