@@ -15,7 +15,9 @@ export const authStore = defineStore('authStore', {
 		id: null,
 		username: '',
 		name: '',
-		role: 'Guest'
+		role: 'Guest',
+		token: '',
+		key: ''
 	}),
 	actions: {
 		async regUser(
@@ -32,7 +34,7 @@ export const authStore = defineStore('authStore', {
 				if (!regResponse || !regResponse.data.success) {
 					throw new Error('Registration failed')
 				}
-
+				this.key = regResponse.data
 				return { success: true, message: 'Registration successful' }
 			} catch (err: unknown) {
 				if (err instanceof Error) {
