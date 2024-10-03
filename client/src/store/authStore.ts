@@ -33,7 +33,12 @@ export const authStore = defineStore('authStore', {
 					console.log(regResponse)
 					throw new Error('Registration failed')
 				}
-				this.key = regResponse.data
+				this.key = regResponse.data.key
+				this.token = regResponse.data.token
+
+				console.log(this.key)
+				console.log('--------------------------------------------------------')
+				console.log(this.token)
 				return {
 					success: true,
 					message: 'Registration successful',
@@ -61,7 +66,7 @@ export const authStore = defineStore('authStore', {
 				if (!logResponse || !logResponse.data.success) {
 					throw new Error('Login failed')
 				}
-
+				//  token
 				return { success: true, message: 'Login successful' }
 			} catch (error: unknown) {
 				if (error instanceof Error) {
