@@ -82,8 +82,17 @@ export class AuthService {
 	}
 	async profile(req) {
 		const user = await this.usersService.findOne(req.user.userId)
-		if (!user) throw new UnauthorizedException('Неверный номер телефона')
-		const { ...data } = user
+		if (!user)
+			return {
+				result: 'failed',
+				data: 'Неверный пароль'
+			}
+
+		function addResultField<T>(obj: T): T & { result: 'success' } {
+			return { ...obj, result: 'success' }
+		}
+
+		const data = addResultField(user)
 		return data
 	}
 }

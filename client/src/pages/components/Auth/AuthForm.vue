@@ -91,9 +91,7 @@ const regUser = (username: string, password: string) => {
 const loginUser = (username: string, password: string) => {
 	AuthStore.loginUser({
 		username: username,
-		password: password,
-		repass: password,
-		name: username
+		password: password
 	})
 }
 </script>
