@@ -50,7 +50,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { authStore } from '../../../store/authStore.ts'
+
+const router = useRouter()
 
 const isReg = ref(true)
 const AuthStore = authStore()
@@ -91,10 +94,11 @@ const regUser = (username: string, password: string) => {
 const loginUser = (username: string, password: string) => {
 	AuthStore.loginUser({
 		username: username,
-		password: password,
-		repass: password,
-		name: username
+		password: password
 	})
+	if (AuthStore.token) {
+		router.push('/client')
+	}
 }
 </script>
 

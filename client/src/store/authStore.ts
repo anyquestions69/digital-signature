@@ -3,11 +3,20 @@ import { defineStore } from 'pinia'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:3000/api'
 
-interface AuthConfig {
+interface RegConfig {
 	username: string
 	password: string
 	repass: string
 	name: string
+}
+
+interface LogConfig {
+	username: string
+	password: string
+}
+
+interface UserConfig {
+	access_token: string
 }
 
 export const authStore = defineStore('authStore', {
@@ -16,71 +25,77 @@ export const authStore = defineStore('authStore', {
 		username: '',
 		name: '',
 		role: 'Guest',
+		key: '',
 		token: '',
-		key: ''
+		status: ''
 	}),
+
 	actions: {
-		async regUser(
-			regConfig: AuthConfig
-		): Promise<{ success: boolean; message?: string }> {
+		async regUser(regConfig: RegConfig) {
 			try {
 				const regResponse = await axios.post(
 					BASE_URL + '/auth/register',
 					regConfig
 				)
 
-				console.table({ regConfig, regResponse }) // убрать логирование
-
-				if (!regResponse || !regResponse.data.success) {
-					throw new Error('Registration failed')
-				}
-				this.key = regResponse.data
-				return { success: true, message: 'Registration successful' }
-			} catch (err: unknown) {
-				if (err instanceof Error) {
-					console.error(err.message)
-					return {
-						success: false,
-						message: err.message || 'Registration failed'
-					}
+				if (regResponse.data.result === 'failed') {
+					this.status = 'failed'
+					console.log(regResponse.data.data)
 				} else {
-					console.error('Неизвестная ошибка:', err)
-					return { success: false, message: 'Unknown error occurred' }
+					this.key = regResponse.data.key
+					this.token = regResponse.data.token
+					this.status = 'success'
 				}
+				// TODO:
+				// убрать логи
+				console.log(this.key)
+				console.log('---------------------------')
+				console.log(this.token)
+				console.log('---------------------------')
+				console.log(this.status)
+			} catch (err: any) {
+				console.info(`Unexpected error: ${err.message}`)
 			}
 		},
-		async loginUser(
-			logConfig: AuthConfig
-		): Promise<{ success: boolean; message?: string }> {
+
+		async loginUser(logConfig: LogConfig) {
 			try {
-				const logResponse = await axios.post(BASE_URL + 'auth/login', logConfig)
+				const logResponse = await axios.post(
+					BASE_URL + '/auth/login',
+					logConfig
+				)
 
-				if (!logResponse || !logResponse.data.success) {
-					throw new Error('Login failed')
-				}
-
-				return { success: true, message: 'Login successful' }
-			} catch (error: unknown) {
-				if (error instanceof Error) {
-					console.error(error.message)
-					return { success: false, message: error.message || 'Login failed' }
+				if (logResponse.data.result === 'failed') {
+					this.status = 'failed'
+					console.log(logResponse.data.data)
 				} else {
-					console.error('Неизвестная ошибка:', error)
-					return { success: false, message: 'Unknown error occurred' }
+					this.token = logResponse.data.access_token
+					this.status = 'success'
 				}
+				// TODO:
+				// убрать логи
+				console.log(this.token)
+				console.log('---------------------------')
+				console.log(this.status)
+			} catch (err: any) {
+				console.info(`Unexpected error: ${err.message}`)
 			}
 		},
-		async getUser(
-			userConfig: any
-		): Promise<{ success: boolean; message?: string }> {
+		async getUser(userConfig: UserConfig) {
 			try {
 				const userResponse = await axios.post(
-					BASE_URL + 'auth/profile',
+					BASE_URL + '/auth/profile',
 					userConfig
 				)
 
-				if (!userResponse || !userResponse.data.success) {
-					throw new Error('Failed to get user config')
+				if (userResponse.data.result === 'failed') {
+					this.status = 'failed'
+					console.log(userResponse.data.data)
+				} else {
+					this.username = userResponse.data.username
+					this.name = userResponse.data.name
+					this.role = userResponse.data.role
+					this.status = 'success'
 				}
 
 				return { success: true, message: 'User info retrieved successfully' }
@@ -93,7 +108,6 @@ export const authStore = defineStore('authStore', {
 					}
 				} else {
 					console.error('Неизвестная ошибка:', error)
-					return { success: false, message: 'Unknown error occurred' }
 				}
 			}
 		}
