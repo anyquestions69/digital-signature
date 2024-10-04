@@ -81,66 +81,72 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { authStore } from '../../../store/authStore.ts'
+	import { ref } from 'vue'
+	import { useRouter } from 'vue-router'
+	import { authStore } from '../../../store/authStore.ts'
 
-const isReg = ref(true)
-const AuthStore = authStore()
-const username = ref('')
-const password = ref('')
-const repass = ref('')
 
-const isFocusUsername = ref(false)
-const isFocusPassword = ref(false)
-const isFocusRePassword = ref(false)
+	const router = useRouter()
+	const AuthStore = authStore()
 
-const isCliced = ref( false )
+	const isReg = ref(true)
+	const username = ref('')
+	const password = ref('')
+	const repass = ref('')
 
-const upUsernameInput = () => {
-	isFocusUsername.value = true
-}
-const downUsernameInput = () => {
-	isFocusUsername.value = false
-}
+	const isFocusUsername = ref(false)
+	const isFocusPassword = ref(false)
+	const isFocusRePassword = ref(false)
 
-const upPasswordInput = () => {
-	isFocusPassword.value = true
-}
-const downPasswordInput = () => {
-	isFocusPassword.value = false
-}
+	const isCliced = ref( false )
 
-const upRePasswordInput = () => {
-	isFocusRePassword.value = true
-}
-const downRePasswordInput = () => {
-	isFocusRePassword.value = false
-}
+	const upUsernameInput = () => {
+		isFocusUsername.value = true
+	}
+	const downUsernameInput = () => {
+		isFocusUsername.value = false
+	}
 
-const changeMode = () => {
-	isReg.value = !isReg.value
-}
-//TODO:
-// поля для ввода репаса и имени
-const regUser = (username: string, password: string) => {
-	isCliced.value = true
-	AuthStore.regUser({
-		username: username,
-		password: password,
-		repass: password,
-		name: username
-	})
-}
+	const upPasswordInput = () => {
+		isFocusPassword.value = true
+	}
+	const downPasswordInput = () => {
+		isFocusPassword.value = false
+	}
 
-const loginUser = (username: string, password: string) => {
-	isCliced.value = true
-	AuthStore.loginUser({
-		username: username,
-		password: password,
-		repass: password,
-		name: username
-	})
-}
+	const upRePasswordInput = () => {
+		isFocusRePassword.value = true
+	}
+	const downRePasswordInput = () => {
+		isFocusRePassword.value = false
+	}
+
+	const changeMode = () => {
+		isReg.value = !isReg.value
+	}
+	//TODO:
+	// поля для ввода репаса и имени
+	const regUser = async (username: string, password: string) => {
+		isCliced.value = true
+		await AuthStore.regUser({
+			username: username,
+			password: password,
+			repass: password,
+			name: username
+		})
+	}
+
+	const loginUser = async (username: string, password: string) => {
+		isCliced.value = true
+		await AuthStore.loginUser({
+			username: username,
+			password: password
+		})
+
+		if( AuthStore.token ) {
+			router.push('/client')
+		}
+	}
 </script>
 
 <style lang="scss">
