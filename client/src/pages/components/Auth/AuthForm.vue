@@ -94,13 +94,13 @@
 				};`"
 			>
 				<label
-					for="password"
+					for="repass"
 					:style="`top: ${isFocusRePassword || repass ? '-20px' : '0px'}`"
 					>Повторите пароль</label
 				>
 				<input
 					type="password"
-					id="password"
+					id="repass"
 					v-model="repass"
 					@focus="upRePasswordInput"
 					@blur="downRePasswordInput"
@@ -193,6 +193,9 @@ const regUser = async (username: string, password: string) => {
 		repass: password,
 		name: username
 	})
+	if (AuthStore.token) {
+		router.push('/client')
+	}
 }
 
 const loginUser = async (username: string, password: string) => {
@@ -201,7 +204,6 @@ const loginUser = async (username: string, password: string) => {
 		username: username,
 		password: password
 	})
-
 	if (AuthStore.token) {
 		router.push('/client')
 	}

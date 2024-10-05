@@ -1,1 +1,5 @@
 .env
+node_modules
+/node_modules
+./node_modules
+C:\Users\ta1\Documents\projects\digital-signature\server\node_modules

@@ -82,6 +82,7 @@ export const authStore = defineStore('authStore', {
 				console.info(`Unexpected error: ${err.message}`)
 			}
 		},
+
 		async getUser(userConfig: UserConfig) {
 			try {
 				const userResponse = await axios.post(
@@ -98,15 +99,9 @@ export const authStore = defineStore('authStore', {
 					this.role = userResponse.data.role
 					this.status = 'success'
 				}
-
-				return { success: true, message: 'User info retrieved successfully' }
 			} catch (error: unknown) {
 				if (error instanceof Error) {
-					console.error(error.message)
-					return {
-						success: false,
-						message: error.message || 'Failed to get user config'
-					}
+					console.info(error.message)
 				} else {
 					console.error('Неизвестная ошибка:', error)
 				}
