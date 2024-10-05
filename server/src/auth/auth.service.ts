@@ -1,6 +1,4 @@
 import {
-	BadRequestException,
-	ConflictException,
 	Injectable,
 	StreamableFile,
 	UnauthorizedException
@@ -22,10 +20,16 @@ export class AuthService {
 	async register(register: RegisterDto) {
 		const user = await this.usersService.findByUsername(register.username)
 		if (user) {
-			throw new ConflictException('Пользователь с таким номером уже существует')
+			return {
+				result: 'failed',
+				data: 'Пользователь с таким логином уже существует'
+			}
 		}
 		if (register.password !== register.repass) {
-			throw new BadRequestException('Пароли не совпадают')
+			return {
+				result: 'failed',
+				data: 'Пароли не совпадают'
+			}
 		}
 		const reg = await this.usersService.create(register)
 		const { publicKey } = await this.rsa.generateKeys(
@@ -37,9 +41,23 @@ export class AuthService {
 			username: String(reg.username),
 			role: reg.role
 		}
-		await this.jwtService.signAsync(payload)
+
 		const file = createReadStream('./keys/' + register.username + '/public.pem')
-		return new StreamableFile(file)
+		const res = new StreamableFile(file)
+		let publicKeyText = ''
+
+		const reader = res.getStream()
+		reader.on('data', chunk => {
+			publicKeyText += chunk.toString()
+		})
+		await new Promise(resolve => {
+			reader.on('end', resolve)
+		})
+		return {
+			result: 'success',
+			key: publicKeyText,
+			token: await this.jwtService.signAsync(payload)
+		}
 	}
 
 	async login(loginDto: LoginDto) {
@@ -48,7 +66,10 @@ export class AuthService {
 		const isValid = await bcrypt.compare(loginDto.password, user.password)
 
 		if (!isValid) {
-			throw new UnauthorizedException('Неверный пароль')
+			return {
+				result: 'failed',
+				data: 'Неверный пароль'
+			}
 		}
 		const payload = {
 			id: user.id,

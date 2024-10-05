@@ -1,10 +1,19 @@
 <template>
 	<div class="main__form">
 		<h1 class="form__title">
-			{{ `${isReg ? 'Регистрация' : 'Авоторизация'}` }}
+			{{ `${isReg ? 'Регистрация' : 'Авторизация'}` }}
 		</h1>
 		<form>
-			<div class="form__item">
+			<div
+				class="form__item"
+				:style="`border-color: ${
+					((isCliced && username.length < 3) ||
+						(username.length > 0 && username.length < 3)) &&
+					isReg
+						? '#d00754'
+						: ''
+				};`"
+			>
 				<label
 					for="username"
 					:style="`top: ${isFocusUsername || username ? '-20px' : '0px'}`"
@@ -17,20 +26,103 @@
 					@focus="upUsernameInput"
 					@blur="downUsernameInput"
 				/>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 512 512"
+					v-if="false"
+				>
+					<path
+						d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c-9.4 9.4-9.4 24.6 0 33.9l47 47-47 47c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l47-47 47 47c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-47-47 47-47c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-47 47-47-47c-9.4-9.4-24.6-9.4-33.9 0z"
+					/>
+				</svg>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 512 512"
+					v-if="false"
+				>
+					<path
+						d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-111 111-47-47c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l64 64c9.4 9.4 24.6 9.4 33.9 0L369 209z"
+					/>
+				</svg>
 			</div>
-			<div class="form__item">
+			<div
+				class="form__item"
+				:style="`border-color: ${
+					(password != repass || (!password && isCliced)) && isReg
+						? '#d00754'
+						: ''
+				};`"
+			>
 				<label
 					for="password"
 					:style="`top: ${isFocusPassword || password ? '-20px' : '0px'}`"
 					>Пароль</label
 				>
 				<input
-					type="text"
+					type="password"
 					id="password"
 					v-model="password"
 					@focus="upPasswordInput"
 					@blur="downPasswordInput"
 				/>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 512 512"
+					v-if="false"
+				>
+					<path
+						d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c-9.4 9.4-9.4 24.6 0 33.9l47 47-47 47c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l47-47 47 47c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-47-47 47-47c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-47 47-47-47c-9.4-9.4-24.6-9.4-33.9 0z"
+					/>
+				</svg>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 512 512"
+					v-if="false"
+				>
+					<path
+						d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-111 111-47-47c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l64 64c9.4 9.4 24.6 9.4 33.9 0L369 209z"
+					/>
+				</svg>
+			</div>
+			<div
+				class="form__item"
+				v-if="isReg"
+				:style="`border-color: ${
+					(password != repass || (!repass && isCliced)) && isReg
+						? '#d00754'
+						: ''
+				};`"
+			>
+				<label
+					for="password"
+					:style="`top: ${isFocusRePassword || repass ? '-20px' : '0px'}`"
+					>Повторите пароль</label
+				>
+				<input
+					type="password"
+					id="password"
+					v-model="repass"
+					@focus="upRePasswordInput"
+					@blur="downRePasswordInput"
+				/>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 512 512"
+					v-if="false"
+				>
+					<path
+						d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c-9.4 9.4-9.4 24.6 0 33.9l47 47-47 47c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l47-47 47 47c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-47-47 47-47c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-47 47-47-47c-9.4-9.4-24.6-9.4-33.9 0z"
+					/>
+				</svg>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 512 512"
+					v-if="false"
+				>
+					<path
+						d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-111 111-47-47c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l64 64c9.4 9.4 24.6 9.4 33.9 0L369 209z"
+					/>
+				</svg>
 			</div>
 			<div class="form__info">
 				<label>{{
@@ -54,14 +146,18 @@ import { useRouter } from 'vue-router'
 import { authStore } from '../../../store/authStore.ts'
 
 const router = useRouter()
+const AuthStore = authStore()
 
 const isReg = ref(true)
-const AuthStore = authStore()
 const username = ref('')
 const password = ref('')
+const repass = ref('')
 
 const isFocusUsername = ref(false)
 const isFocusPassword = ref(false)
+const isFocusRePassword = ref(false)
+
+const isCliced = ref(false)
 
 const upUsernameInput = () => {
 	isFocusUsername.value = true
@@ -77,13 +173,21 @@ const downPasswordInput = () => {
 	isFocusPassword.value = false
 }
 
+const upRePasswordInput = () => {
+	isFocusRePassword.value = true
+}
+const downRePasswordInput = () => {
+	isFocusRePassword.value = false
+}
+
 const changeMode = () => {
 	isReg.value = !isReg.value
 }
 //TODO:
 // поля для ввода репаса и имени
-const regUser = (username: string, password: string) => {
-	AuthStore.regUser({
+const regUser = async (username: string, password: string) => {
+	isCliced.value = true
+	await AuthStore.regUser({
 		username: username,
 		password: password,
 		repass: password,
@@ -91,11 +195,13 @@ const regUser = (username: string, password: string) => {
 	})
 }
 
-const loginUser = (username: string, password: string) => {
-	AuthStore.loginUser({
+const loginUser = async (username: string, password: string) => {
+	isCliced.value = true
+	await AuthStore.loginUser({
 		username: username,
 		password: password
 	})
+
 	if (AuthStore.token) {
 		router.push('/client')
 	}
@@ -117,7 +223,7 @@ const loginUser = (username: string, password: string) => {
 	}
 
 	form {
-		margin-top: 60px;
+		margin-top: 40px;
 		display: flex;
 		flex-direction: column;
 		gap: 30px;
@@ -150,12 +256,17 @@ const loginUser = (username: string, password: string) => {
 				cursor: pointer;
 				color: white;
 				transition: all 0.5s ease;
+
+				&:hover {
+					text-decoration: underline;
+				}
 			}
 		}
 
 		button {
 			margin-top: 30px;
 			height: 40px;
+			border-radius: 15px;
 		}
 	}
 }
