@@ -4,7 +4,6 @@
 			{{ `${isReg ? 'Регистрация' : 'Авторизация'}` }}
 		</h1>
 		<form>
-<<<<<<< HEAD
 			<div
 				class="form__item"
 				:style="`border-color: ${
@@ -15,9 +14,6 @@
 						: ''
 				};`"
 			>
-=======
-			<div class="form__item" :style="`border-color: ${ ( ( isCliced && username.length < 3 ) || ( username.length > 0 && username.length < 3 ) ) && isReg ? '#d00754' : '' };`">
->>>>>>> 5b004ec7236a80b1d97b5928759bb777d76979df
 				<label
 					for="username"
 					:style="`top: ${isFocusUsername || username ? '-20px' : '0px'}`"
@@ -30,7 +26,6 @@
 					@focus="upUsernameInput"
 					@blur="downUsernameInput"
 				/>
-<<<<<<< HEAD
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					viewBox="0 0 512 512"
@@ -58,16 +53,6 @@
 						: ''
 				};`"
 			>
-=======
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" v-if="false">
-					<path d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c-9.4 9.4-9.4 24.6 0 33.9l47 47-47 47c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l47-47 47 47c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-47-47 47-47c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-47 47-47-47c-9.4-9.4-24.6-9.4-33.9 0z"/>
-				</svg>
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" v-if="false">
-					<path d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-111 111-47-47c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l64 64c9.4 9.4 24.6 9.4 33.9 0L369 209z"/>
-				</svg>
-			</div>
-			<div class="form__item" :style="`border-color: ${( (password != repass) || ( !password && isCliced ) ) && isReg ? '#d00754' : ''};`">
->>>>>>> 5b004ec7236a80b1d97b5928759bb777d76979df
 				<label
 					for="password"
 					:style="`top: ${isFocusPassword || password ? '-20px' : '0px'}`"
@@ -80,7 +65,6 @@
 					@focus="upPasswordInput"
 					@blur="downPasswordInput"
 				/>
-<<<<<<< HEAD
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					viewBox="0 0 512 512"
@@ -110,35 +94,17 @@
 				};`"
 			>
 				<label
-					for="repass"
-					:style="`top: ${isFocusRePassword || repass ? '-20px' : '0px'}`"
-=======
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" v-if="false">
-					<path d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c-9.4 9.4-9.4 24.6 0 33.9l47 47-47 47c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l47-47 47 47c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-47-47 47-47c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-47 47-47-47c-9.4-9.4-24.6-9.4-33.9 0z"/>
-				</svg>
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" v-if="false">
-					<path d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-111 111-47-47c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l64 64c9.4 9.4 24.6 9.4 33.9 0L369 209z"/>
-				</svg>
-			</div>
-			<div class="form__item" v-if="isReg" :style="`border-color: ${( (password != repass) || ( !repass && isCliced ) ) && isReg ? '#d00754' : ''};`">
-				<label
 					for="password"
-					:style="`top: ${ isFocusRePassword || repass ? '-20px' : '0px' }`"
->>>>>>> 5b004ec7236a80b1d97b5928759bb777d76979df
+					:style="`top: ${isFocusRePassword || repass ? '-20px' : '0px'}`"
 					>Повторите пароль</label
 				>
 				<input
 					type="password"
-<<<<<<< HEAD
-					id="repass"
-=======
 					id="password"
->>>>>>> 5b004ec7236a80b1d97b5928759bb777d76979df
 					v-model="repass"
 					@focus="upRePasswordInput"
 					@blur="downRePasswordInput"
 				/>
-<<<<<<< HEAD
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					viewBox="0 0 512 512"
@@ -156,13 +122,6 @@
 					<path
 						d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-111 111-47-47c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l64 64c9.4 9.4 24.6 9.4 33.9 0L369 209z"
 					/>
-=======
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" v-if="false">
-					<path d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c-9.4 9.4-9.4 24.6 0 33.9l47 47-47 47c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l47-47 47 47c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-47-47 47-47c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-47 47-47-47c-9.4-9.4-24.6-9.4-33.9 0z"/>
-				</svg>
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" v-if="false">
-					<path d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-111 111-47-47c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l64 64c9.4 9.4 24.6 9.4 33.9 0L369 209z"/>
->>>>>>> 5b004ec7236a80b1d97b5928759bb777d76979df
 				</svg>
 			</div>
 			<div class="form__info">
@@ -182,7 +141,6 @@
 </template>
 
 <script setup lang="ts">
-<<<<<<< HEAD
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { authStore } from '../../../store/authStore.ts'
@@ -200,26 +158,21 @@ const isFocusPassword = ref(false)
 const isFocusRePassword = ref(false)
 
 const isCliced = ref(false)
-=======
-	import { ref } from 'vue'
-	import { useRouter } from 'vue-router'
-	import { authStore } from '../../../store/authStore.ts'
 
+const upUsernameInput = () => {
+	isFocusUsername.value = true
+}
+const downUsernameInput = () => {
+	isFocusUsername.value = false
+}
 
-	const router = useRouter()
-	const AuthStore = authStore()
->>>>>>> 5b004ec7236a80b1d97b5928759bb777d76979df
+const upPasswordInput = () => {
+	isFocusPassword.value = true
+}
+const downPasswordInput = () => {
+	isFocusPassword.value = false
+}
 
-	const isReg = ref(true)
-	const username = ref('')
-	const password = ref('')
-	const repass = ref('')
-
-	const isFocusUsername = ref(false)
-	const isFocusPassword = ref(false)
-	const isFocusRePassword = ref(false)
-
-<<<<<<< HEAD
 const upRePasswordInput = () => {
 	isFocusRePassword.value = true
 }
@@ -240,9 +193,6 @@ const regUser = async (username: string, password: string) => {
 		repass: password,
 		name: username
 	})
-	if (AuthStore.token) {
-		router.push('/client')
-	}
 }
 
 const loginUser = async (username: string, password: string) => {
@@ -251,61 +201,11 @@ const loginUser = async (username: string, password: string) => {
 		username: username,
 		password: password
 	})
+
 	if (AuthStore.token) {
 		router.push('/client')
 	}
 }
-=======
-	const isCliced = ref( false )
-
-	const upUsernameInput = () => {
-		isFocusUsername.value = true
-	}
-	const downUsernameInput = () => {
-		isFocusUsername.value = false
-	}
-
-	const upPasswordInput = () => {
-		isFocusPassword.value = true
-	}
-	const downPasswordInput = () => {
-		isFocusPassword.value = false
-	}
-
-	const upRePasswordInput = () => {
-		isFocusRePassword.value = true
-	}
-	const downRePasswordInput = () => {
-		isFocusRePassword.value = false
-	}
-
-	const changeMode = () => {
-		isReg.value = !isReg.value
-	}
-	//TODO:
-	// поля для ввода репаса и имени
-	const regUser = async (username: string, password: string) => {
-		isCliced.value = true
-		await AuthStore.regUser({
-			username: username,
-			password: password,
-			repass: password,
-			name: username
-		})
-	}
-
-	const loginUser = async (username: string, password: string) => {
-		isCliced.value = true
-		await AuthStore.loginUser({
-			username: username,
-			password: password
-		})
-
-		if( AuthStore.token ) {
-			router.push('/client')
-		}
-	}
->>>>>>> 5b004ec7236a80b1d97b5928759bb777d76979df
 </script>
 
 <style lang="scss">
