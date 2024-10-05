@@ -46,10 +46,7 @@ export const authStore = defineStore('authStore', {
 					this.token = regResponse.data.token
 					this.status = 'success'
 				}
-<<<<<<< HEAD
-=======
-				
->>>>>>> 813ae17ec142ecab3ea881c6e6d11114c8e0ef96
+
 				// TODO:
 				// убрать логи
 				console.log(this.key)
