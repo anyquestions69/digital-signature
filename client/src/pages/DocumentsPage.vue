@@ -1,5 +1,5 @@
 <template>
-	<Header :head_content="head_content" />
+	<Header :headerContent="headerContent" />
 	<main class="wrapper__main-documents box">
 		<DocBody />
 	</main>
@@ -11,7 +11,7 @@ import DocBody from './components/Doc/DocBody.vue'
 import Footer from './components/Footer/Footer.vue'
 import Header from './components/Header/Header.vue'
 
-const head_content = {
+const headerContent = {
 	button: {
 		to: '/client',
 		text: 'Личный кабинет'
@@ -19,7 +19,7 @@ const head_content = {
 	nav: [
 		{
 			id: 0,
-			name: 'Документы'
+			text: 'Документы'
 		}
 	]
 }

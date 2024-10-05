@@ -29,6 +29,8 @@
     </footer>
 </template>
 
+<script setup lang="ts"></script>
+
 <style lang="scss">
 .wrapper__footer {
     padding-top: 20px;

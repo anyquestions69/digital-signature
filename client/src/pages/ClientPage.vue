@@ -1,5 +1,5 @@
 <template>
-    <Header :head_content="head_content" />
+    <Header :headerContent="headerContent" />
     <main class="wrapper__main-client">
         <ClientConteiner />
     </main>
@@ -11,24 +11,11 @@ import Header from './components/Header/Header.vue'
 import Footer from './components/Footer/Footer.vue'
 import ClientConteiner from './components/Client/ClientConteiner.vue'
 
-const head_content = {
+const headerContent = {
     button: {
-        to: '/auth',
-        text: 'Вход / Регистрация'
+        to: '/client/documents',
+        text: 'Публикация приказов'
     },
-    nav: [
-        {
-            id: 0,
-            name: 'Вступление'
-        },
-        {
-            id: 1,
-            name: 'Обновления'
-        },
-        {
-            id: 2,
-            name: 'О нас'
-        }
-    ] 
+    nav: []
 }
 </script>

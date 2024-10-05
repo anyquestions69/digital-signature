@@ -15,13 +15,10 @@ interface LogConfig {
 	password: string
 }
 
-<<<<<<< HEAD
 interface UserConfig {
 	access_token: string
 }
 
-=======
->>>>>>> 5b004ec7236a80b1d97b5928759bb777d76979df
 export const authStore = defineStore('authStore', {
 	state: () => ({
 		id: null,
@@ -29,7 +26,7 @@ export const authStore = defineStore('authStore', {
 		name: '',
 		role: 'Guest',
 		key: '',
-		token: '',
+		token: 'xccxcxcxcxc',
 		status: ''
 	}),
 
@@ -49,11 +46,7 @@ export const authStore = defineStore('authStore', {
 					this.token = regResponse.data.token
 					this.status = 'success'
 				}
-<<<<<<< HEAD
 
-=======
-				
->>>>>>> 5b004ec7236a80b1d97b5928759bb777d76979df
 				// TODO:
 				// убрать логи
 				console.log(this.key)

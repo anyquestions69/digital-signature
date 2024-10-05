@@ -1,38 +1,38 @@
 <template>
-    <Header :head_content="head_content" />
+    <Header :headerContent="headerContent" />
     <main class="wrapper__main box">
-        <Intro />
-        <ScopeApplication />
-        <Advantages />
+        <InfoIntro />
+        <InfoScopeApplication />
+        <InfoAdvantages />
     </main>
     <Footer />
 </template>
 
 <script setup lang="ts">
 import Header from './components/Header/Header.vue';
-import Intro from './components/Info/Intro.vue';
-import ScopeApplication from './components/Info/ScopeApplication.vue';
-import Advantages from './components/Info/Advantages.vue';
+import InfoIntro from './components/Info/InfoIntro.vue';
+import InfoScopeApplication from './components/Info/InfoScopeApplication.vue';
+import InfoAdvantages from './components/Info/InfoAdvantages.vue';
 import Footer from './components/Footer/Footer.vue'
 
 
-const head_content = {
+const headerContent = {
     button: {
-        to: '/auth',
+        to: '/api/auth',
         text: 'Вход / Регистрация'
     },
     nav: [
         {
             id: 0,
-            name: 'Вступление'
+            text: 'Вступление'
         },
         {
             id: 1,
-            name: 'Обновления'
+            text: 'Обновления'
         },
         {
             id: 2,
-            name: 'О нас'
+            text: 'О нас'
         }
     ] 
 }

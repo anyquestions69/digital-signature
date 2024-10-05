@@ -31,7 +31,7 @@
 
     .scope__list {
         margin-top: 50px;
-        @include Flex( row, space-between, center );
+        @include Flex( row, space-between, stretch );
 
         .scope__item {
             width: 30%;

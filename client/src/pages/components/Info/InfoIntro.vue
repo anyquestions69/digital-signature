@@ -20,16 +20,13 @@
 
 <style lang="scss">
 .wrapper__intro {
-    margin-top: 80px;
+    margin: 80px 0;
     width: 100%;
-    margin-bottom: 100px;
 
     .intro__conteiner {
         width: 100%;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        gap: 20px;
+        @include Flex( row, space-between, stretch );
+        // gap: 20px;
 
         .conteiner__text {
             width: 50%;
@@ -62,6 +59,7 @@
                 border-radius: 20px;
                 width: 500px;
                 height: auto;
+                translate: -15px 0;
             }
         }
     }

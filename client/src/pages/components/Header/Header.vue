@@ -15,26 +15,27 @@
 				<ul class="nav__list">
 					<li
 						class="list__item"
-						v-for="item in props.head_content.nav"
+						v-for="item in props.headerContent.nav"
 						:key="item.id"
 					>
 						<a>
-							{{ item.name }}
+							{{ item.text }}
 						</a>
 					</li>
 				</ul>
 			</nav>
 			<RouterLink
 				class="conteiner__auth"
-				:to="head_content.button.to"
+				:to="headerContent.button.to"
 				v-if="width_screen > 1024"
-				>{{ head_content.button.text }}</RouterLink
+				>{{ headerContent.button.text }}</RouterLink
 			>
-			<BurgerMenu v-else @click="openMobileMenu" />
+			<HeaderBurgerMenu v-else @click="openMobileMenu" />
 		</div>
-		<MobileConteiner
-			:class="`header__mobile-menu ${mobileMenuIsOpen ? 'show' : 'unshow'}`"
-			:head_content="props.head_content"
+		<HeaderMobileConteiner
+			v-if="btnIsClicked "
+			:class="`header__mobile-menu ${ btnIsClicked ? ( mobileMenuIsOpen ? 'show' : 'unshow' ) : '' }`"
+			:headerContent="props.headerContent"
 		/>
 	</header>
 </template>
@@ -42,31 +43,39 @@
 <script setup lang="ts">
 import { defineProps, ref } from 'vue'
 
-import BurgerMenu from './BurgerMenu.vue'
-import MobileConteiner from './MobileConteiner.vue'
+import HeaderBurgerMenu from './HeaderBurgerMenu.vue'
+import HeaderMobileConteiner from './HeaderMobileConteiner.vue'
+import { HeaderContent } from './HeaderInterfaces'
+
 
 // Обработка props
 const props = defineProps<{
-	head_content: {
-		nav: any[]
-		button: {
-			to: string
-			text: string
-		}
-	}
+	headerContent: HeaderContent
 }>()
 
 // Обработка изменения ширины экрана
-const width_screen = ref(window.screen.width)
+const width_screen = ref( window.screen.width )
 const handleResize = () => {
 	width_screen.value = window.screen.width
+
+	closeAdaptive( width_screen.value )
 }
+
+const closeAdaptive = ( inputWith: number ) => {
+	if( inputWith > 1024 ) {
+		mobileMenuIsOpen.value = false
+		btnIsClicked.value = false
+	}
+}
+
 window.addEventListener('resize', handleResize)
 
 // Обработка мобильного меню
-const mobileMenuIsOpen = ref(false)
+const mobileMenuIsOpen = ref( false )
+const btnIsClicked = ref( false )
 
 const openMobileMenu = () => {
+	btnIsClicked.value = true
 	mobileMenuIsOpen.value = !mobileMenuIsOpen.value
 }
 </script>
@@ -198,7 +207,7 @@ const openMobileMenu = () => {
 			}
 
 			to {
-				height: 120px;
+				height: 180px;
 				opacity: 1;
 				transform: translateY(0);
 				display: block;
@@ -207,7 +216,7 @@ const openMobileMenu = () => {
 
 		@keyframes unShowMobileMenu {
 			from {
-				height: 120px;
+				height: 180px;
 				opacity: 1;
 				transform: translateY(0);
 				display: block;

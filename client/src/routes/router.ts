@@ -10,6 +10,9 @@ import DocumentsPage from '../pages/DocumentsPage.vue'
 import InfoPage from '../pages/InfoPage.vue'
 import PdfPage from '../pages/PdfPage.vue'
 
+import { authStore } from '../store/authStore'
+
+
 const router = createRouter({
 	history: createWebHashHistory(),
 	routes: [
@@ -24,31 +27,13 @@ const router = createRouter({
 			component: InfoPage
 		},
 		{
-			path: '/auth',
+			path: '/api/auth',
 			name: 'AuthPage',
 			meta: {
 				title: 'Авторизация',
 				needAuth: false
 			},
 			component: AuthPage
-		},
-		{
-			path: '/documents',
-			name: 'DocumentsPage',
-			meta: {
-				title: 'Список приказов',
-				needAuth: true
-			},
-			component: DocumentsPage
-		},
-		{
-			path: '/document/:id',
-			name: 'PdfPage',
-			meta: {
-				title: 'Приказ',
-				needAuth: true
-			},
-			component: PdfPage
 		},
 		{
 			path: '/client',
@@ -58,6 +43,24 @@ const router = createRouter({
 				needAuth: true
 			},
 			component: ClientPage
+		},
+		{
+			path: '/client/documents',
+			name: 'DocumentsPage',
+			meta: {
+				title: 'Список приказов',
+				needAuth: true
+			},
+			component: DocumentsPage
+		},
+		{
+			path: '/client/document/:id',
+			name: 'PdfPage',
+			meta: {
+				title: 'Приказ',
+				needAuth: true
+			},
+			component: PdfPage
 		}
 	]
 })
@@ -65,7 +68,18 @@ const router = createRouter({
 router.beforeEach(
 	(to: RouteLocationNormalized, _from: RouteLocationNormalized, next) => {
 		document.title = to.meta.title ? String(to.meta.title) : 'Ошибка'
-		next()
+
+		if( to.meta.needAuth ) {
+
+			if( authStore().token ) {
+				next()
+			} else {
+				next({ path: '/api/auth' })
+			}
+
+		} else {
+			next()
+		}
 	}
 )
 

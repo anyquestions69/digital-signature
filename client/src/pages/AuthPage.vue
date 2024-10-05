@@ -1,5 +1,5 @@
 <template>
-    <Header :head_content="head_content" />
+    <Header :headerContent="headerContent" />
     <main class="wrapper__main-auth box">
         <AuthForm />
     </main>
@@ -12,7 +12,7 @@ import AuthForm from './components/Auth/AuthForm.vue'
 import Header from './components/Header/Header.vue';
 
 
-const head_content = {
+const headerContent = {
     button: {
         to: '/',
         text: 'На главную'

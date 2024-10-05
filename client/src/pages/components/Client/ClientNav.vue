@@ -27,7 +27,7 @@
             </li>
             <li class="list__item">
                 <p>
-                Чат
+                    Чат
                 </p>
             </li>
             <li class="list__item end">

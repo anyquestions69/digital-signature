@@ -1,5 +1,5 @@
 <template>
-    <Header :head_content="head_content" />
+    <Header :headerContent="headerContent" />
     <main class="wrapper__main-pdf box">
         <PdfContent />
     </main>
@@ -11,24 +11,11 @@ import PdfContent from "./components/Pdf/PdfContent.vue"
 import Footer from './components/Footer/Footer.vue';
 import Header from './components/Header/Header.vue';
 
-const head_content = {
+const headerContent = {
     button: {
-        to: '/auth',
-        text: 'Вход / Регистрация'
+        to: '/client/documents',
+        text: 'Список документов'
     },
-    nav: [
-        {
-            id: 0,
-            name: 'Вступление'
-        },
-        {
-            id: 1,
-            name: 'Обновления'
-        },
-        {
-            id: 2,
-            name: 'О нас'
-        }
-    ] 
+    nav: [] 
 }
 </script>
