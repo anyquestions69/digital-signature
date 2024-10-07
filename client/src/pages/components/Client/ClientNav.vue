@@ -5,35 +5,22 @@
                 <img src="../../../assets/img/user.png" alt="user" />
             </div>
             <div class="person__info">
-                <p class="name">{{ user.name }}</p>
-                <p class="position">{{ user.position }}</p>
+                <p class="name">{{ AuthStore.nickname }}</p>
             </div>
         </div>
         <ul class="panel__list">
-            <li class="list__item">
-                <p>
-                    Мои документы
-                </p>
-            </li>
-            <li class="list__item">
-                <p>
-                    Черновики
-                </p>
-            </li>
-            <li class="list__item">
-                <p>
-                    Настройки
-                </p>
-            </li>
-            <li class="list__item">
-                <p>
-                    Чат
-                </p>
-            </li>
-            <li class="list__item end">
-                <p>
-                    Выйти
-                </p>
+            <div class="list__body">
+                <li class="list__item" 
+                    v-for="item in PagesStore.clientPage.navList" 
+                    :key="item.id"
+                    @click="PagesStore.changeNavVariant( item.id )">
+                    <p>
+                        {{ item.text }}
+                    </p>
+                </li>
+            </div>
+            <li class="list__item-end" @click="exitFromSys">
+                <p>Выйти</p>
             </li>
         </ul>
     </div>
@@ -41,15 +28,45 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+import { authStore } from '../../../store/authStore.ts'
+import { pagesStore } from '../../../store/pagesStore.ts'
+
 
 var user = ref({
     img: '../../../assets/img/logo.png',
-    name: 'Андрей Сергеевич',
-    position: 'Зам. нач. кафедры'
+    name: 'Андрей Сергеевич'
 })
+
+const AuthStore = authStore()
+const PagesStore = pagesStore()
+const router = useRouter()
+
+const exitFromSys = () => {
+    AuthStore.sysExit()
+    router.push('/api/auth')
+    
+}
 </script>
 
 <style lang="scss">
+@mixin Item( $bg-color: #414141 ) {
+    width: 100%;
+    height: 50px;
+    cursor: pointer;
+    @include FlexRow;
+    padding: 5px 20px;
+
+    &:hover {
+        background: $bg-color;
+    }
+
+    p {
+        background: transparent;
+    }
+}
+
 .nav__panel {
     @include Flex;
     width: 100%;
@@ -58,7 +75,7 @@ var user = ref({
         @include Flex( column, space-between, start );
         padding: 20px;
         width: 100%;
-        height: 150px;
+        height: 120px;
         border-bottom: 2px solid $border-color;
         gap: 10px;
 
@@ -67,7 +84,6 @@ var user = ref({
             height: 50px;
             border-radius: 50%;
             background: red;
-            // background: url('../../../assets/img/user.png');
 
             img {
                 user-select: none;
@@ -81,7 +97,7 @@ var user = ref({
             p {
 
                 &.name {
-                    font-size: 20px;
+                    font-size: 18px;
                     font-weight: 600;
                 }
 
@@ -95,27 +111,23 @@ var user = ref({
     }
 
     .panel__list {
-        @include Flex;
+        @include Flex( column, space-between, stretch );
+        flex-wrap: wrap;
+        align-content: space-around;
         width: 100%;
+        min-height: 512.5px;
+        height: auto;
 
-        .list__item {
+        .list__body {
             width: 100%;
-            height: 50px;
-            cursor: pointer;
-            @include FlexRow;
-            padding: 5px 20px;
-
-            &:hover {
-                background: rgb(65, 65, 65);
+            
+            .list__item {
+                @include Item();
             }
+        }
 
-            p {
-                background: transparent;
-            }
-
-            &.end {
-                align-self: flex-end;
-            }
+        .list__item-end {
+            @include Item( rgba(255, 0, 0, 0.3) );
         }
     }
 }

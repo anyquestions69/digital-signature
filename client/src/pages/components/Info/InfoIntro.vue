@@ -26,7 +26,6 @@
     .intro__conteiner {
         width: 100%;
         @include Flex( row, space-between, stretch );
-        // gap: 20px;
 
         .conteiner__text {
             width: 50%;
@@ -54,12 +53,31 @@
         .conteiner__animation {
             user-select: none;
             width: 40%;
+            position: relative;
 
             img {
+                position: absolute;
                 border-radius: 20px;
                 width: 500px;
                 height: auto;
                 translate: -15px 0;
+
+                @media ( max-width: 1400px ) {
+                    translate: -45px 0;
+                }
+
+                @media ( max-width: 1300px ) {
+                    translate: -85px 0;
+                }
+
+                @media ( max-width: 1090px ) {
+                    scale: 0.9;
+                    translate: -95px 0;
+                }
+
+                @media ( max-width: 1090px ) {
+                    translate: -85px 0;
+                }
             }
         }
     }

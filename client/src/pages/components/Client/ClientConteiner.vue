@@ -5,7 +5,7 @@
                 <ClientNav />
             </div>
             <div class="content__info">
-                <ClientInfo />
+                <component :is="ContentVariant[ PagesStore.clientPage.navVariant ]" />
             </div>
         </div>
     </div>
@@ -14,6 +14,23 @@
 <script setup lang="ts">
 import ClientNav from './ClientNav.vue'
 import ClientInfo from './ClientInfo.vue'
+import ClientChat from './ClientChat.vue'
+import ClientDrafts from './ClientDrafts.vue'
+import ClientDocToSignature from './ClientDocToSignature.vue'
+import ClientSettings from './ClientSettings.vue'
+
+import { pagesStore } from '../../../store/pagesStore.ts'
+
+
+const PagesStore = pagesStore()
+
+const ContentVariant = [
+    ClientInfo,
+    ClientDocToSignature,
+    ClientDrafts,
+    ClientChat,
+    ClientSettings
+]
 </script>
 
 <style lang="scss">

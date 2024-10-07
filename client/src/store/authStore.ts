@@ -23,7 +23,11 @@ export const authStore = defineStore('authStore', {
 	state: () => ({
 		id: null,
 		username: '',
-		name: '',
+		nickname: 'Fallen Angel',
+		name: 'Дудкин Александр Сергеевич',
+		post: 'Зам. нач. кафедры',
+		division: '61 кафедра',
+		img: '',
 		role: 'Guest',
 		key: '',
 		token: 'xccxcxcxcxc',
@@ -106,6 +110,16 @@ export const authStore = defineStore('authStore', {
 					console.error('Неизвестная ошибка:', error)
 				}
 			}
+		},
+
+		sysExit() {
+			this.id = null
+			this.username = ''
+			this.name = ''
+			this.role = 'Guest'
+			this.key = ''
+			this.token = ''
+			this.status = ''
 		}
 	},
 	getters: {}
