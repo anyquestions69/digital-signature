@@ -36,7 +36,10 @@ export class AdminController {
 		@Body() createPostDto: CreatePostDto,
 		@Request() req
 	) {
-		if (req.user.role !== 'Admin') throw new ForbiddenException('Not admin')
+		if (req.user.role !== 'Admin') {
+			console.log(req.user.role)
+			throw new ForbiddenException('Not admin')
+		}
 		return this.postService.create(createPostDto, file)
 	}
 
