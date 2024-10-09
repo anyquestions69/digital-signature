@@ -49,6 +49,8 @@ export const authStore = defineStore('authStore', {
 					this.key = regResponse.data.key
 					this.token = regResponse.data.token
 					this.status = 'success'
+					this.username = regConfig.username
+					this.name = regConfig.name
 				}
 
 				// TODO:
@@ -76,6 +78,7 @@ export const authStore = defineStore('authStore', {
 				} else {
 					this.token = logResponse.data.access_token
 					this.status = 'success'
+					this.username = logConfig.username
 				}
 				// TODO:
 				// убрать логи
