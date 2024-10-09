@@ -1,8 +1,4 @@
-import {
-	BadRequestException,
-	Injectable,
-	NotFoundException
-} from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { PrismaService } from 'prisma/prisma.service'
 import { EncryptionService } from 'src/encryption/encryption.service'
 import { CreatePostDto } from './dto/create-post.dto'
@@ -17,15 +13,22 @@ export class PostService {
 
 	async create(dto: CreatePostDto, file: Express.Multer.File) {
 		try {
-			return await this.prisma.post.create({
+			const data = await this.prisma.post.create({
 				data: {
 					title: dto.title,
 					filename: file.filename,
 					hash: 'hashexample'
 				}
 			})
+			return {
+				result: 'success',
+				data: data
+			}
 		} catch (error) {
-			throw new BadRequestException('Ошибка при создании поста')
+			return {
+				result: 'failed',
+				data: 'Не удалось создать пост'
+			}
 		}
 	}
 
@@ -60,7 +63,6 @@ export class PostService {
 				where: { id: id }
 			})
 			if (posts) return posts
-			console.log('eopriwjg')
 		} catch (error) {
 			throw new NotFoundException(`Пост с ID ${id} не найден`)
 		}
@@ -68,17 +70,34 @@ export class PostService {
 
 	update(id: number, updatePostDto: UpdatePostDto) {
 		try {
-			return this.prisma.post.update({ data: updatePostDto, where: { id } })
+			const data = this.prisma.post.update({
+				data: updatePostDto,
+				where: { id: id }
+			})
+			return {
+				result: 'success',
+				data: data
+			}
 		} catch (error) {
-			throw new BadRequestException('Ошибка при обновлении поста')
+			return {
+				result: 'failed',
+				data: 'Ошибка при обновлении поста'
+			}
 		}
 	}
 
 	remove(id: number) {
 		try {
-			return this.prisma.post.delete({ where: { id: id } })
+			const data = this.prisma.post.delete({ where: { id: id } })
+			return {
+				result: 'success',
+				data: data
+			}
 		} catch (error) {
-			throw new NotFoundException(`Пост с ID ${id} не найден`)
+			return {
+				result: 'failed',
+				data: `Пост с ID ${id} не найден`
+			}
 		}
 	}
 }

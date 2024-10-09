@@ -30,6 +30,7 @@ export const postStore = defineStore('postStore', {
 		status: 'success',
 		subscribers: [] as string[]
 	}),
+
 	actions: {
 		async getPostList() {
 			try {
@@ -56,10 +57,24 @@ export const postStore = defineStore('postStore', {
 					postConfig,
 					{
 						headers: {
-							'Content-Type': 'multipart/form-data'
+							'Content-Type': 'multipart/form-data',
+							Authorization: `Bearer ${AuthStore.token}`
 						}
 					}
 				)
+				if (createPostResponse.data.result === 'failed') {
+					this.status = 'failed'
+					console.log(createPostResponse.data.data)
+				} else {
+					this.status = 'success'
+					this.post = createPostResponse.data.data
+
+					//TODO:
+					// убрать логи
+					console.log(this.status)
+					console.log('----------------------------------')
+					console.log(this.post)
+				}
 				console.log('Post created successfully:', createPostResponse.data)
 			} catch (error) {
 				console.error('Error creating post:', error)
@@ -85,9 +100,57 @@ export const postStore = defineStore('postStore', {
 					this.subscribers.push(
 						subscribePostResponse.data.signatures.user.username
 					)
+					this.status = 'success'
 				}
 			} catch (error) {
 				console.error('Error subscribing to post:', error)
+			}
+		},
+
+		async deletePost(id: number) {
+			try {
+				const deletePostResponse = await axios.delete(
+					`${BASE_URL}/admin/post/${id}`,
+					{
+						headers: {
+							'Content-Type': 'multipart/form-data',
+							Authorization: `Bearer ${AuthStore.token}`
+						}
+					}
+				)
+				if (deletePostResponse.data.result === 'failed') {
+					this.status = 'failed'
+					console.log(deletePostResponse.data.data)
+				} else {
+					this.status = 'success'
+				}
+				console.log('Post deleted successfully:', deletePostResponse.data)
+			} catch (error) {
+				console.error('Error deleting post:', error)
+			}
+		},
+
+		async updatePost(id: number, title: string) {
+			try {
+				const updatePostResponse = await axios.patch(
+					`${BASE_URL}/admin/post/${id}`,
+					title,
+					{
+						headers: {
+							'Content-Type': 'multipart/form-data',
+							Authorization: `Bearer ${AuthStore.token}`
+						}
+					}
+				)
+				if (updatePostResponse.data.result === 'failed') {
+					this.status = 'failed'
+					console.log(updatePostResponse.data.data)
+				} else {
+					this.status = 'success'
+				}
+				console.log('Post updated successfully:', updatePostResponse.data)
+			} catch (error) {
+				console.error('Error updating post:', error)
 			}
 		}
 	},
