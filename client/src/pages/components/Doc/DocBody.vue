@@ -14,12 +14,16 @@
             </div>
         </div>
         <ul class="document__list">
-            <li v-for="elem in data" :key="elem.id" class="list__elem">
+            <li v-for="elem in PostStore.postList" :key="elem.id"   class="list__elem">
                 <div class="elem__text">
                     <div>
                         <p>{{ elem.title }}</p>
-                        <p>Должностное лицо: <span>{{ elem.persone }}</span></p>
-                        <p>Дата: <span>{{ elem.date }}</span></p>
+                        <p>Должностное лицо: 
+                            <span>Неизвестно</span>
+                        </p>
+                        <p>Дата:
+                            <span>Неизвестно</span>
+                        </p>
                     </div>
                 </div>
                 <RouterLink  :to="`document/id=${ elem.id }`">
@@ -37,27 +41,15 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
+import { postStore } from '../../../store/postStore'
 
-const data = [
-    {
-        id: 0,
-        title: 'Приказ ВЛКСМ',
-        persone: 'Начальник 6 факультета',
-        date: '12.10.2024'
-    },
-    {
-        id: 1,
-        title: 'Приказ ВЛКСМ',
-        persone: 'Начальник 6 факультета',
-        date: '12.10.2024'
-    },
-    {
-        id: 2,
-        title: 'Приказ ВЛКСМ',
-        persone: 'Начальник 6 факультета',
-        date:  '12.10.2024'
-    }
-]
+
+onMounted(() => {
+    postStore().getPostList()
+})
+
+
 </script>
 
 <style lang="scss">

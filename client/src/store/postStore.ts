@@ -4,7 +4,6 @@ import { authStore } from './authStore'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:3000/api'
 
-const AuthStore = authStore()
 interface Post {
 	id: number
 	title: string
@@ -58,7 +57,7 @@ export const postStore = defineStore('postStore', {
 					{
 						headers: {
 							'Content-Type': 'multipart/form-data',
-							Authorization: `Bearer ${AuthStore.token}`
+							Authorization: `Bearer ${authStore().token}`
 						}
 					}
 				)
@@ -89,7 +88,7 @@ export const postStore = defineStore('postStore', {
 					{
 						headers: {
 							'Content-Type': 'multipart/form-data',
-							Authorization: `Bearer ${AuthStore.token}`
+							Authorization: `Bearer ${authStore().token}`
 						}
 					}
 				)
@@ -114,7 +113,7 @@ export const postStore = defineStore('postStore', {
 					{
 						headers: {
 							'Content-Type': 'multipart/form-data',
-							Authorization: `Bearer ${AuthStore.token}`
+							Authorization: `Bearer ${authStore().token}`
 						}
 					}
 				)
@@ -138,7 +137,7 @@ export const postStore = defineStore('postStore', {
 					{
 						headers: {
 							'Content-Type': 'multipart/form-data',
-							Authorization: `Bearer ${AuthStore.token}`
+							Authorization: `Bearer ${authStore().token}`
 						}
 					}
 				)

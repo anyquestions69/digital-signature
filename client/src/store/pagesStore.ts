@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 export const pagesStore = defineStore('pagesStore', {
     state: () => ({
         clientPage: {
+            isOpenEditor: false,
             navVariant: 0,
             navList: [
                 {   
@@ -30,8 +31,15 @@ export const pagesStore = defineStore('pagesStore', {
     }),
 
     actions: {
+        //actions to ClientPage
         changeNavVariant( variantId: number ) {
             this.clientPage.navVariant = variantId
+        },
+        toggleEditor() {
+            this.clientPage.isOpenEditor = !this.clientPage.isOpenEditor
+        },
+        editClientInfo() {
+            this.toggleEditor()
         }
     }
 })

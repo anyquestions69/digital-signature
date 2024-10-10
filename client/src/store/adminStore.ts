@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
 // import axios from "axios";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:3000/api'
+// const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:3000/api'
 
 export const adminStore = defineStore('adminStore', {
 	state: () => ({
-		id: null,
+		id: null, // не передаем 
 		username: '',
 		nickname: 'Fallen Angel',
 		name: 'Дудкин Александр Сергеевич',

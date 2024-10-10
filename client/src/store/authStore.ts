@@ -19,19 +19,29 @@ interface UserConfig {
 	access_token: string
 }
 
+interface EditConfig {
+	name: string,
+	post: string,
+	division: string
+}
+
 export const authStore = defineStore('authStore', {
 	state: () => ({
-		id: null,
+		// конфиг при регистрации
 		username: '',
-		nickname: 'Fallen Angel',
-		name: 'Дудкин Александр Сергеевич',
-		post: 'Зам. нач. кафедры',
-		division: '61 кафедра',
-		img: '',
+		name: 'Неизвестно', // передаем надо добавить в AuthForm ввод имени
+
 		role: 'Guest',
-		key: '',
-		token: 'xccxcxcxcxc',
-		status: ''
+
+		post: 'Неизвестно', // не передаем а надо завтра вместе надо решить по какой логике это делать типа при редактировании лк или регистрации
+		division: 'Неизвестно', // тоже самое
+
+		key: '', // получаем
+		token: '', // получаем
+		status: '', // получаем
+
+		id: null, // не передаем
+		img: '' // не передаем
 	}),
 
 	actions: {
@@ -112,6 +122,16 @@ export const authStore = defineStore('authStore', {
 				} else {
 					console.error('Неизвестная ошибка:', error)
 				}
+			}
+		},
+
+		async editPersInfo( editConfig: EditConfig ) {
+			try {
+				this.name = editConfig.name
+				this.post = editConfig.post
+				this.division = editConfig.division
+			} catch ( error ) {
+				console.error('Ошибка изменения информации пользователя:', error)
 			}
 		},
 
