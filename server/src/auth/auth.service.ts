@@ -55,6 +55,7 @@ export class AuthService {
 		})
 		return {
 			result: 'success',
+			data: payload,
 			key: publicKeyText,
 			token: await this.jwtService.signAsync(payload)
 		}
@@ -77,6 +78,8 @@ export class AuthService {
 			role: user.role
 		}
 		return {
+			result: 'success',
+			data: payload,
 			access_token: await this.jwtService.signAsync(payload)
 		}
 	}

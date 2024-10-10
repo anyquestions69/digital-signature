@@ -19,17 +19,23 @@ model User {
   username   String      @unique
   name       String
   password   String
+  division   String
+  job        String
   role       Role        @default(Guest)
   signatures Signature[]
+  Post       Post[]
 }
 
 model Post {
   id         Int         @id @default(autoincrement())
   title      String
   filename   String
+  date       DateTime    @default(now())
   hash       String
   signatures Signature[]
   delivered  Boolean     @default(false)
+  userId     Int
+  User       User        @relation(fields: [userId], references: [id])
 }
 
 model Signature {

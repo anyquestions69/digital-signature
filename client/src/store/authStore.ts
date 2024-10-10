@@ -8,6 +8,8 @@ interface RegConfig {
 	password: string
 	repass: string
 	name: string
+	job: string
+	division: string
 }
 
 interface LogConfig {
@@ -15,33 +17,23 @@ interface LogConfig {
 	password: string
 }
 
-interface UserConfig {
-	access_token: string
-}
-
 interface EditConfig {
-	name: string,
-	post: string,
+	name: string
+	post: string
 	division: string
 }
 
 export const authStore = defineStore('authStore', {
 	state: () => ({
-		// конфиг при регистрации
+		id: 0, 
 		username: '',
-		name: 'Неизвестно', // передаем надо добавить в AuthForm ввод имени
-
+		name: '', 
 		role: 'Guest',
-
-		post: 'Неизвестно', // не передаем а надо завтра вместе надо решить по какой логике это делать типа при редактировании лк или регистрации
-		division: 'Неизвестно', // тоже самое
-
-		key: '', // получаем
-		token: '', // получаем
-		status: '', // получаем
-
-		id: null, // не передаем
-		img: '' // не передаем
+		post: '', 
+		division: '', 
+		key: '', 
+		token: '', 
+		status: '', 
 	}),
 
 	actions: {
@@ -54,22 +46,15 @@ export const authStore = defineStore('authStore', {
 
 				if (regResponse.data.result === 'failed') {
 					this.status = 'failed'
-					console.log(regResponse.data.data)
 				} else {
 					this.key = regResponse.data.key
 					this.token = regResponse.data.token
 					this.status = 'success'
 					this.username = regConfig.username
 					this.name = regConfig.name
+					this.id = regResponse.data.data.id
 				}
 
-				// TODO:
-				// убрать логи
-				console.log(this.key)
-				console.log('---------------------------')
-				console.log(this.token)
-				console.log('---------------------------')
-				console.log(this.status)
 			} catch (err: any) {
 				console.info(`Unexpected error: ${err.message}`)
 			}
@@ -89,31 +74,29 @@ export const authStore = defineStore('authStore', {
 					this.token = logResponse.data.access_token
 					this.status = 'success'
 					this.username = logConfig.username
+					console.log(logResponse.data)
+					this.id = logResponse.data.data.id
+					await this.getUser(this.id)
 				}
-				// TODO:
-				// убрать логи
-				console.log(this.token)
-				console.log('---------------------------')
-				console.log(this.status)
 			} catch (err: any) {
 				console.info(`Unexpected error: ${err.message}`)
 			}
 		},
 
-		async getUser(userConfig: UserConfig) {
+		async getUser(id: number) {
 			try {
-				const userResponse = await axios.post(
-					BASE_URL + '/auth/profile',
-					userConfig
+				const userResponse = await axios.get(
+					`${BASE_URL}/user/${id}`
 				)
 
 				if (userResponse.data.result === 'failed') {
 					this.status = 'failed'
-					console.log(userResponse.data.data)
 				} else {
 					this.username = userResponse.data.username
 					this.name = userResponse.data.name
 					this.role = userResponse.data.role
+					this.post = userResponse.data.job
+					this.division = userResponse.data.division
 					this.status = 'success'
 				}
 			} catch (error: unknown) {
@@ -125,24 +108,50 @@ export const authStore = defineStore('authStore', {
 			}
 		},
 
-		async editPersInfo( editConfig: EditConfig ) {
+		async editPersInfo(editConfig: EditConfig) {
 			try {
-				this.name = editConfig.name
-				this.post = editConfig.post
-				this.division = editConfig.division
-			} catch ( error ) {
+				if (!this.id) {
+					this.status = 'failed'
+					console.error('Пользователь не зарегистрирован')
+				}
+				const editData = {
+					name: editConfig.name,
+					job: editConfig.post,
+					division: editConfig.division
+				}
+				const editResponse = await axios.put(
+					`${BASE_URL}/admin/user/${this.id}`,
+					editData,
+					{
+						headers: {
+							Authorization: `Bearer ${this.token}`
+						}
+					}
+				)
+				if ((editResponse.data.result = 'success')) {
+					this.name = editConfig.name
+					this.post = editConfig.post
+					this.division = editConfig.division
+					this.status = 'success'
+				} else {
+					this.status = 'failed'
+					console.error('Ошибка при обновлении данных пользователя')
+				}
+			} catch (error) {
 				console.error('Ошибка изменения информации пользователя:', error)
 			}
 		},
 
 		sysExit() {
-			this.id = null
+			this.id = 0
 			this.username = ''
 			this.name = ''
 			this.role = 'Guest'
 			this.key = ''
 			this.token = ''
 			this.status = ''
+			this.post = ''
+			this.division = ''
 		}
 	},
 	getters: {}

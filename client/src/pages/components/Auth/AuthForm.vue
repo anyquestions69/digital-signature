@@ -192,7 +192,9 @@ const regUser = async (username: string, password: string) => {
 		username: username,
 		password: password,
 		repass: password,
-		name: 'Неизвестно'
+		name: 'Неизвестно',
+		division: 'Неизвестно',
+		job: 'Неизвестно'
 	})
 
 	if (AuthStore.token) {

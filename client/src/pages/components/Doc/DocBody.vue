@@ -45,6 +45,8 @@ import { onMounted } from 'vue'
 import { postStore } from '../../../store/postStore'
 
 
+const PostStore =  postStore()
+
 onMounted(() => {
     postStore().getPostList()
 })

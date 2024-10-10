@@ -12,7 +12,9 @@ export class UserService {
 			data: {
 				username: register.username,
 				name: register.name,
-				password: hashedPassword
+				password: hashedPassword,
+				division: register.division,
+				job: register.job
 			}
 		})
 	}

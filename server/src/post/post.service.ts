@@ -11,13 +11,14 @@ export class PostService {
 		private rsa: EncryptionService
 	) {}
 
-	async create(dto: CreatePostDto, file: Express.Multer.File) {
+	async create(id: number, dto: CreatePostDto, file: Express.Multer.File) {
 		try {
 			const data = await this.prisma.post.create({
 				data: {
 					title: dto.title,
 					filename: file.filename,
-					hash: 'hashexample'
+					hash: 'hashexample',
+					userId: id
 				}
 			})
 			return {

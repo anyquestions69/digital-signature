@@ -40,7 +40,7 @@ export class AdminController {
 			console.log(req.user.role)
 			throw new ForbiddenException('Not admin')
 		}
-		return this.postService.create(createPostDto, file)
+		return this.postService.create(req.user.id, createPostDto, file)
 	}
 
 	@Patch('post/:id')
@@ -59,16 +59,11 @@ export class AdminController {
 		return this.postService.remove(+id)
 	}
 
-	@Patch('user/:id')
-	updateUser(
-		@Param('id') id: string,
-		@Body() updateUserDto: UpdateUserDto,
-		@Request() req
-	) {
-		if (req.user.role !== 'Admin') throw new ForbiddenException('Not admin')
+	@Put('user/:id')
+	updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
 		return this.userService.update(+id, updateUserDto)
 	}
-	@Put('user/:id')
+	@Patch('user/:id')
 	setAdmin(@Param('id') id: string, @Request() req) {
 		if (req.user.role !== 'Admin') throw new ForbiddenException('Not admin')
 		return this.userService.setAdmin(+id)

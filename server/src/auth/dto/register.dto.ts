@@ -3,4 +3,6 @@ export class RegisterDto {
 	username: string
 	password: string
 	repass: string
+	division: string
+	job: string
 }
