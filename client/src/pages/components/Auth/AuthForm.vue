@@ -184,8 +184,7 @@ const downRePasswordInput = () => {
 const changeMode = () => {
 	isReg.value = !isReg.value
 }
-//TODO:
-// поля для ввода репаса и имени
+
 const regUser = async (username: string, password: string) => {
 	isCliced.value = true
 	await AuthStore.regUser({
@@ -196,8 +195,9 @@ const regUser = async (username: string, password: string) => {
 		division: 'Неизвестно',
 		job: 'Неизвестно'
 	})
-
-	if (AuthStore.token) {
+	if (AuthStore.status === 'failed') {
+		alert(AuthStore.err)
+	} else if (AuthStore.token) {
 		router.push('/client')
 	}
 }
