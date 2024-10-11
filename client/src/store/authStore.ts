@@ -25,15 +25,15 @@ interface EditConfig {
 
 export const authStore = defineStore('authStore', {
 	state: () => ({
-		id: 0, 
+		id: 0,
 		username: '',
-		name: '', 
-		role: 'Guest',
-		post: '', 
-		division: '', 
-		key: '', 
-		token: '', 
-		status: '', 
+		name: '',
+		role: 'Admin',
+		post: '',
+		division: '',
+		key: '',
+		token: '',
+		status: ''
 	}),
 
 	actions: {
@@ -54,7 +54,6 @@ export const authStore = defineStore('authStore', {
 					this.name = regConfig.name
 					this.id = regResponse.data.data.id
 				}
-
 			} catch (err: any) {
 				console.info(`Unexpected error: ${err.message}`)
 			}
@@ -84,9 +83,7 @@ export const authStore = defineStore('authStore', {
 
 		async getUser(id: number) {
 			try {
-				const userResponse = await axios.get(
-					`${BASE_URL}/user/${id}`
-				)
+				const userResponse = await axios.get(`${BASE_URL}/user/${id}`)
 
 				if (userResponse.data.result === 'failed') {
 					this.status = 'failed'
@@ -141,13 +138,11 @@ export const authStore = defineStore('authStore', {
 			}
 		},
 
-		 async getChief(id:number) {
-			const userResponse = await axios.get(
-				`${BASE_URL}/user/${id}`
-			)
+		async getChief(id: number) {
+			const userResponse = await axios.get(`${BASE_URL}/user/${id}`)
 			return userResponse.data.name
 		},
-		
+
 		sysExit() {
 			this.id = 0
 			this.username = ''
@@ -160,5 +155,10 @@ export const authStore = defineStore('authStore', {
 			this.division = ''
 		}
 	},
-	getters: {}
+	getters: {
+		getUserRole(): boolean {
+			return this.role === 'Admin'
+		}
+	},
+	persist: true
 })

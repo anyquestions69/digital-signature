@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { PrismaService } from 'prisma/prisma.service'
 import { EncryptionService } from 'src/encryption/encryption.service'
 import { PostGateway } from 'src/post/post.gateway'
@@ -14,13 +14,27 @@ export class SignatureService {
 	) {}
 	async create(postId: number, file: Express.Multer.File, req) {
 		try {
+			console.log(postId)
+			console.log('------------------')
+			console.log(file)
+			// console.log('------------------')
+			// console.log(req)
 			const key = Buffer.from(file.buffer).toLocaleString()
 			const post = await this.postService.service(postId)
-			if (!post) throw new BadRequestException('No such post')
+			if (!post)
+				return {
+					result: 'failed',
+					data: 'No such post'
+				}
+
 			const hash = this.rsa.encrypt(post.title, key)
 			const check = this.rsa.checkSignature(req.user.username, hash)
-			if (check != post.title) throw new BadRequestException('Неверный ключ!')
-			const sig = await this.prisma.post.update({
+			if (check != post.title)
+				return {
+					result: 'failed',
+					data: 'Неверный ключ!'
+				}
+			let sig = await this.prisma.post.update({
 				where: { id: post.id },
 				data: {
 					signatures: {
@@ -40,7 +54,7 @@ export class SignatureService {
 				(await this.prisma.user.count())
 			) {
 				console.log('Все расписались. Приказ доведен:')
-				await this.prisma.post.update({
+				sig = await this.prisma.post.update({
 					data: { delivered: true },
 					where: { id: post.id }
 				})

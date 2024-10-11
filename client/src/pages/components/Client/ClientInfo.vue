@@ -28,7 +28,7 @@
                 </button>
             </div>
             <div v-else class="content__my-docs" title="В разработке" style="padding: 30px;">
-                <p>В разработке</p>
+                <p>Здесь пока пусто</p>
             </div>
         </div>
     </div>

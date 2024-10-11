@@ -63,13 +63,14 @@ export class PostService {
 			})
 
 			const payloads = posts.map(post => ({
-				id:  post.id,
+				id: post.id,
 				title: post.title,
 				filename: post.filename,
 				hash: post.hash,
 				date: post.date,
 				content: Buffer.from(post.content).toString('base64'),
-				userId: post.userId
+				userId: post.userId,
+				signatures: post.signatures || {}
 			}))
 
 			return {
@@ -91,7 +92,7 @@ export class PostService {
 					signatures: {
 						select: {
 							hash: true,
-							user: { select: { username: true, name: true } }
+							user: { select: { id: true, username: true, name: true } }
 						}
 					}
 				},
@@ -103,7 +104,8 @@ export class PostService {
 				hash: post.hash,
 				date: post.date,
 				content: Buffer.from(post.content).toString('base64'),
-				userId: post.userId
+				userId: post.userId,
+				signatures: post.signatures || []
 			}
 			if (post)
 				return {

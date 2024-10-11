@@ -1,5 +1,5 @@
 <template>
     <div title="В разработке" style="padding: 30px;">
-        <p>В разработке</p>
+        <p>Чат в разработке</p>
     </div>
 </template>

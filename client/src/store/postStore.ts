@@ -8,21 +8,30 @@ interface Post {
 	id: number
 	title: string
 	filename: string
-	content: { type: 'Buffer'; data: number[] }
+	content: string
 	date: string
 	delivered?: boolean
-	signatures?: Array<Object>
+	signatures: Array<User>
 	userId: number
+}
+
+interface User {
+	hash: string
+	user: {
+		id: number
+		username: string
+		name: string
+	}
 }
 
 interface PostConfig {
 	title: string
-	file: FormData
+	file: File
 }
 
 interface SubscribeConfig {
 	id: number
-	key: FormData
+	key: File
 }
 
 export const postStore = defineStore('postStore', {
@@ -30,7 +39,7 @@ export const postStore = defineStore('postStore', {
 		postList: [] as Post[],
 		post: {} as Post,
 		status: 'success',
-		subscribers: [] as string[]
+		subscribers: [] as Object[]
 	}),
 
 	actions: {
@@ -47,6 +56,7 @@ export const postStore = defineStore('postStore', {
 			try {
 				const postResponse = await axios.get(`${BASE_URL}/post/${id}`)
 				this.post = postResponse.data.data
+				this.status = postResponse.data.result
 			} catch (error) {
 				console.error('Error fetching post:', error)
 			}
@@ -54,12 +64,15 @@ export const postStore = defineStore('postStore', {
 
 		async createPost(postConfig: PostConfig) {
 			try {
+				const formData = new FormData()
+				formData.append('title', postConfig.title)
+				formData.append('file', postConfig.file)
 				const createPostResponse = await axios.post(
 					`${BASE_URL}/admin/post`,
-					postConfig,
+					formData,
 					{
 						headers: {
-							'Content-Type': 'multipart/form-data',
+							// 'Content-Type': 'multipart/form-data',
 							Authorization: `Bearer ${authStore().token}`
 						}
 					}
@@ -85,12 +98,15 @@ export const postStore = defineStore('postStore', {
 
 		async subscribePost(subscribeConfig: SubscribeConfig) {
 			try {
+				const formData = new FormData()
+				formData.append('file', subscribeConfig.key)
+				console.log(subscribeConfig.id)
 				const subscribePostResponse = await axios.post(
 					`${BASE_URL}/sign/${subscribeConfig.id}`,
-					subscribeConfig.key,
+					formData,
 					{
 						headers: {
-							'Content-Type': 'multipart/form-data',
+							// 'Content-Type': 'multipart/form-data',
 							Authorization: `Bearer ${authStore().token}`
 						}
 					}
@@ -99,9 +115,10 @@ export const postStore = defineStore('postStore', {
 					this.status = 'failed'
 					console.log(subscribePostResponse.data.data)
 				} else {
-					this.subscribers.push(
-						subscribePostResponse.data.signatures.user.username
-					)
+					this.subscribers.push({
+						id: subscribePostResponse.data.signatures.user.id,
+						name: subscribePostResponse.data.signatures.user.name
+					})
 					this.status = 'success'
 				}
 			} catch (error) {
@@ -154,6 +171,15 @@ export const postStore = defineStore('postStore', {
 			} catch (error) {
 				console.error('Error updating post:', error)
 			}
+		},
+
+		checkSig(userId: number) {
+			let userExists = false
+			if (this.post.signatures)
+				userExists = this.post.signatures.some(
+					signature => signature.user.id === userId
+				)
+			return userExists
 		},
 
 		sysExit() {
