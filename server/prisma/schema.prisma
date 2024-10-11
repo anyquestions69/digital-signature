@@ -32,10 +32,13 @@ model Post {
   filename   String
   date       DateTime    @default(now())
   hash       String
+  content    Bytes
   signatures Signature[]
   delivered  Boolean     @default(false)
   userId     Int
   User       User        @relation(fields: [userId], references: [id])
+
+  @@unique([filename])
 }
 
 model Signature {

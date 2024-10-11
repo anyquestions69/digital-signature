@@ -1,4 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
+import { readFileSync } from 'fs'
 import { PrismaService } from 'prisma/prisma.service'
 import { EncryptionService } from 'src/encryption/encryption.service'
 import { CreatePostDto } from './dto/create-post.dto'
@@ -13,29 +14,44 @@ export class PostService {
 
 	async create(id: number, dto: CreatePostDto, file: Express.Multer.File) {
 		try {
+			const buffer = Buffer.from(readFileSync(file.path))
+
+			if (!file || !buffer) {
+				throw new Error('Файл не был загружен')
+			}
+
 			const data = await this.prisma.post.create({
 				data: {
 					title: dto.title,
 					filename: file.filename,
+					content: buffer,
 					hash: 'hashexample',
 					userId: id
 				}
 			})
+			const payload = {
+				title: data.title,
+				filename: data.filename,
+				hash: data.hash,
+				date: data.date,
+				content: buffer.toString('base64'),
+				userId: data.userId
+			}
 			return {
 				result: 'success',
-				data: data
+				data: payload
 			}
 		} catch (error) {
 			return {
 				result: 'failed',
-				data: 'Не удалось создать пост'
+				data: error.message || 'Не удалось создать пост'
 			}
 		}
 	}
 
-	findAll() {
+	async findAll() {
 		try {
-			return this.prisma.post.findMany({
+			const posts = await this.prisma.post.findMany({
 				include: {
 					signatures: {
 						select: {
@@ -45,14 +61,32 @@ export class PostService {
 					}
 				}
 			})
+
+			const payloads = posts.map(post => ({
+				id:  post.id,
+				title: post.title,
+				filename: post.filename,
+				hash: post.hash,
+				date: post.date,
+				content: Buffer.from(post.content).toString('base64'),
+				userId: post.userId
+			}))
+
+			return {
+				result: 'success',
+				data: payloads
+			}
 		} catch (error) {
-			throw new NotFoundException('Посты не найдены')
+			return {
+				result: 'failed',
+				data: 'Посты не найдены'
+			}
 		}
 	}
 
 	async findOne(id: number) {
 		try {
-			const posts = await this.prisma.post.findFirst({
+			const post = await this.prisma.post.findFirst({
 				include: {
 					signatures: {
 						select: {
@@ -63,10 +97,38 @@ export class PostService {
 				},
 				where: { id: id }
 			})
-			if (posts) return posts
+			const payload = {
+				title: post.title,
+				filename: post.filename,
+				hash: post.hash,
+				date: post.date,
+				content: Buffer.from(post.content).toString('base64'),
+				userId: post.userId
+			}
+			if (post)
+				return {
+					result: 'success',
+					data: payload
+				}
 		} catch (error) {
-			throw new NotFoundException(`Пост с ID ${id} не найден`)
+			return {
+				result: 'failed',
+				code: `Пост с ID ${id} не найден`
+			}
 		}
+	}
+	async service(id: number) {
+		return await this.prisma.post.findFirst({
+			include: {
+				signatures: {
+					select: {
+						hash: true,
+						user: { select: { username: true, name: true } }
+					}
+				}
+			},
+			where: { id: id }
+		})
 	}
 
 	update(id: number, updatePostDto: UpdatePostDto) {

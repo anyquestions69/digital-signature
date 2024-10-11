@@ -15,7 +15,7 @@ export class SignatureService {
 	async create(postId: number, file: Express.Multer.File, req) {
 		try {
 			const key = Buffer.from(file.buffer).toLocaleString()
-			const post = await this.postService.findOne(postId)
+			const post = await this.postService.service(postId)
 			if (!post) throw new BadRequestException('No such post')
 			const hash = this.rsa.encrypt(post.title, key)
 			const check = this.rsa.checkSignature(req.user.username, hash)

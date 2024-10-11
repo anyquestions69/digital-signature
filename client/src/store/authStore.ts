@@ -74,7 +74,6 @@ export const authStore = defineStore('authStore', {
 					this.token = logResponse.data.access_token
 					this.status = 'success'
 					this.username = logConfig.username
-					console.log(logResponse.data)
 					this.id = logResponse.data.data.id
 					await this.getUser(this.id)
 				}
@@ -142,6 +141,13 @@ export const authStore = defineStore('authStore', {
 			}
 		},
 
+		 async getChief(id:number) {
+			const userResponse = await axios.get(
+				`${BASE_URL}/user/${id}`
+			)
+			return userResponse.data.name
+		},
+		
 		sysExit() {
 			this.id = 0
 			this.username = ''

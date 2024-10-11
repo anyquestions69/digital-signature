@@ -54,7 +54,7 @@ const router = createRouter({
 			component: DocumentsPage
 		},
 		{
-			path: '/client/document/:id',
+			path: '/client/documents/:id',
 			name: 'PdfPage',
 			meta: {
 				title: 'Приказ',

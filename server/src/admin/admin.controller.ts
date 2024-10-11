@@ -40,7 +40,9 @@ export class AdminController {
 			console.log(req.user.role)
 			throw new ForbiddenException('Not admin')
 		}
-		return this.postService.create(req.user.id, createPostDto, file)
+
+
+		return this.postService.create(req.user.userId, createPostDto, file)
 	}
 
 	@Patch('post/:id')

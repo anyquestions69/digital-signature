@@ -8,8 +8,11 @@ interface Post {
 	id: number
 	title: string
 	filename: string
+	content: { type: 'Buffer'; data: number[] }
+	date: string
 	delivered?: boolean
 	signatures?: Array<Object>
+	userId: number
 }
 
 interface PostConfig {
@@ -25,7 +28,7 @@ interface SubscribeConfig {
 export const postStore = defineStore('postStore', {
 	state: () => ({
 		postList: [] as Post[],
-		post: null,
+		post: {} as Post,
 		status: 'success',
 		subscribers: [] as string[]
 	}),
@@ -34,7 +37,7 @@ export const postStore = defineStore('postStore', {
 		async getPostList() {
 			try {
 				const postListResponse = await axios.get(`${BASE_URL}/post`)
-				this.postList = postListResponse.data
+				this.postList = postListResponse.data.data
 			} catch (error) {
 				console.error('Error fetching post list:', error)
 			}
@@ -43,7 +46,7 @@ export const postStore = defineStore('postStore', {
 		async getPost(id: number) {
 			try {
 				const postResponse = await axios.get(`${BASE_URL}/post/${id}`)
-				this.post = postResponse.data
+				this.post = postResponse.data.data
 			} catch (error) {
 				console.error('Error fetching post:', error)
 			}
@@ -151,6 +154,13 @@ export const postStore = defineStore('postStore', {
 			} catch (error) {
 				console.error('Error updating post:', error)
 			}
+		},
+
+		sysExit() {
+			;(this.postList = [] as Post[]),
+				(this.post = {} as Post),
+				(this.status = 'success'),
+				(this.subscribers = [] as string[])
 		}
 	},
 	getters: {}

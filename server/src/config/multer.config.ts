@@ -37,11 +37,29 @@ export const multerOptions = {
 			}
 			cb(null, uploadPath)
 		},
-
 		filename: (req: any, file: any, cb: any) => {
 			cb(null, `${uuid()}${extname(file.originalname)}`)
 		}
-	})
+	}),
+
+	limits: {
+		fileSize: 1024 * 1024 * 5 // 5 MB limit
+	}
+
+	// storage: memoryStorage()
+	// storage: diskStorage({
+	// 	destination: (req: any, file: any, cb: any) => {
+	// 		const uploadPath = multerConfig.dest
+	// 		if (!existsSync(uploadPath)) {
+	// 			mkdirSync(uploadPath)
+	// 		}
+	// 		cb(null, uploadPath)
+	// 	},
+
+	// 	filename: (req: any, file: any, cb: any) => {
+	// 		cb(null, `${uuid()}${extname(file.originalname)}`)
+	// 	}
+	// })
 }
 
 export class ConfigModule {}
