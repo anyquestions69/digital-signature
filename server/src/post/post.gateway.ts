@@ -13,7 +13,7 @@ export class PostGateway {
 	server: Server
 
 	notifyAdmin(postId: number) {
-		const message = `Приказ доведен все расписались`
+		const message = `доведен, все ознакомились`
 
 		this.server.emit('postSigned', {
 			postId: postId,
