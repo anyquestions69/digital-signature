@@ -188,6 +188,5 @@ export const postStore = defineStore('postStore', {
 				(this.status = 'success'),
 				(this.subscribers = [] as string[])
 		}
-	},
-	getters: {}
+	}
 })

@@ -6,4 +6,5 @@ import App from './App.vue'
 import './assets/scss/global.scss'
 import router from './routes/router'
 
+
 createApp(App).use( createPinia().use( piniaPluginPersistedstate ) ).use(router).mount('#app')
