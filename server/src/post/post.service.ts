@@ -49,9 +49,14 @@ export class PostService {
 		}
 	}
 
-	async findAll() {
+	async findAll(page: number, limit: number) {
+		const skip = (page - 1) * limit
+		const take = limit
+
 		try {
 			const posts = await this.prisma.post.findMany({
+				skip: skip,
+				take: take,
 				include: {
 					signatures: {
 						select: {

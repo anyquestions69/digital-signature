@@ -11,10 +11,13 @@
 						<p>{{ elem.title }}</p>
 						<p>
 							Должностное лицо:
-							<span>{{ chiefs[elem.id] || 'Загрузка...' }}</span>
+							<span>
+								{{ chiefs[elem.id] || 'Загрузка...' }}
+							</span>
 						</p>
 						<p>
-							Дата: <span>{{ formatDate(elem.date) || 'Загрузка...' }}</span>
+							Дата:
+							<span>{{ formatDate(elem.date) || 'Загрузка...' }}</span>
 						</p>
 					</div>
 				</div>
@@ -30,28 +33,28 @@
 				</RouterLink>
 			</li>
 		</ul>
-		<button class="document__btn" @click="loadMorePosts">
-			Показать ещё...
-		</button>
+		<button class="document__btn" @click="PagesStore.addCounter()">Показать ещё...</button>
 	</div>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { authStore } from '../../../store/authStore'
 import { postStore } from '../../../store/postStore'
+import { pagesStore } from '../../../store/pagesStore'
 
-import DocSearchForm from './DocSearchForm.vue'
 import DocSelectForm from './DocSelectForm.vue'
+import DocSearchForm from './DocSearchForm.vue'
 
 const AuthStore = authStore()
 const PostStore = postStore()
+const PagesStore = pagesStore()
 
+// Реактивный объект для хранения начальников
 const chiefs = ref<{ [key: number]: string }>({})
-const page = ref(1)
-const limit = 7
 
 const formatDate = (date: any) => {
 	return format(date, 'dd.MM.yyyy', { locale: ru })
@@ -65,17 +68,11 @@ const fetchChiefs = async () => {
 }
 
 onMounted(async () => {
-	await PostStore.getPostList(page.value, limit)
+	await PostStore.getPostList()
 	await fetchChiefs()
 })
 
-const loadMorePosts = async () => {
-	page.value += 1
-	await PostStore.getPostList(page.value, limit)
-	await fetchChiefs()
-}
-
-const PostList = computed(() => PostStore.getRenderingPosts)
+const PostList = computed( () => PostStore.getRenderingPosts )
 </script>
 
 <style lang="scss">
@@ -90,29 +87,35 @@ const PostList = computed(() => PostStore.getRenderingPosts)
 		border: 2px solid rgb(51, 51, 51);
 		box-shadow: 1px 1px 5px white;
 		border-radius: 20px;
+
 		select {
 			border: 1px solid wheat;
 			padding: 5px 10px;
 			border-radius: 10px;
 		}
+
 		div {
 			position: relative;
+
 			input {
 				border-radius: 10px;
 				padding: 5px 10px;
 				border: 1px solid wheat;
 			}
+
 			svg {
 				position: absolute;
 				background: transparent;
 				width: 20px;
 				top: 5px;
 				right: 10px;
+
 				path {
 					fill: $main-font-color;
 				}
 			}
 		}
+
 		button {
 			border-radius: 10px;
 			padding: 10px 20px;
@@ -126,22 +129,27 @@ const PostList = computed(() => PostStore.getRenderingPosts)
 		width: 80%;
 		padding: 40px 20px;
 		gap: 20px;
+
 		.list__elem {
 			padding: 10px 10px 10px 30px;
 			border-radius: 20px;
 			width: 100%;
 			border: 2px solid white;
 			@include FlexRow;
+
 			.elem__text {
 				background: transparent;
+
 				div {
 					p {
 						background: transparent;
 						&:first-of-type {
 							margin-bottom: 20px;
 						}
+
 						&:last-of-type {
 							margin-top: 10px;
+
 							span {
 								margin-left: 20px;
 								text-decoration: underline;
@@ -150,15 +158,18 @@ const PostList = computed(() => PostStore.getRenderingPosts)
 					}
 				}
 			}
+
 			button {
 				padding: 20px 10px;
 				@include ItemLink(5px);
 				background: transparent;
 				height: 100%;
 				border: none;
+
 				p {
 					background: transparent;
 				}
+
 				svg {
 					background: transparent;
 				}

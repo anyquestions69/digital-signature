@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { defineStore } from 'pinia'
 import { authStore } from './authStore'
-import { pagesStore } from './pagesStore'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:3000/api'
 
@@ -40,13 +39,16 @@ export const postStore = defineStore('postStore', {
 		postList: [] as Post[],
 		post: {} as Post,
 		status: 'success',
+		err: '',
 		subscribers: [] as Object[]
 	}),
 
 	actions: {
-		async getPostList() {
+		async getPostList(page: number, limit: number) {
 			try {
-				const postListResponse = await axios.get(`${BASE_URL}/post`)
+				const postListResponse = await axios.get(`${BASE_URL}/post`, {
+					params: { page: page, limit: limit }
+				})
 				this.postList = postListResponse.data.data
 			} catch (error) {
 				console.error('Error fetching post list:', error)
@@ -73,25 +75,17 @@ export const postStore = defineStore('postStore', {
 					formData,
 					{
 						headers: {
-							// 'Content-Type': 'multipart/form-data',
 							Authorization: `Bearer ${authStore().token}`
 						}
 					}
 				)
 				if (createPostResponse.data.result === 'failed') {
 					this.status = 'failed'
-					console.log(createPostResponse.data.data)
+					this.err = createPostResponse.data.data
 				} else {
 					this.status = 'success'
 					this.post = createPostResponse.data.data
-
-					//TODO:
-					// убрать логи
-					console.log(this.status)
-					console.log('----------------------------------')
-					console.log(this.post)
 				}
-				console.log('Post created successfully:', createPostResponse.data)
 			} catch (error) {
 				console.error('Error creating post:', error)
 			}
@@ -101,20 +95,17 @@ export const postStore = defineStore('postStore', {
 			try {
 				const formData = new FormData()
 				formData.append('file', subscribeConfig.key)
-				console.log(subscribeConfig.id)
 				const subscribePostResponse = await axios.post(
 					`${BASE_URL}/sign/${subscribeConfig.id}`,
 					formData,
 					{
 						headers: {
-							// 'Content-Type': 'multipart/form-data',
 							Authorization: `Bearer ${authStore().token}`
 						}
 					}
 				)
 				if (subscribePostResponse.data.result === 'failed') {
 					this.status = 'failed'
-					console.log(subscribePostResponse.data.data)
 				} else {
 					this.subscribers.push({
 						id: subscribePostResponse.data.signatures.user.id,
@@ -140,11 +131,9 @@ export const postStore = defineStore('postStore', {
 				)
 				if (deletePostResponse.data.result === 'failed') {
 					this.status = 'failed'
-					console.log(deletePostResponse.data.data)
 				} else {
 					this.status = 'success'
 				}
-				console.log('Post deleted successfully:', deletePostResponse.data)
 			} catch (error) {
 				console.error('Error deleting post:', error)
 			}
@@ -164,11 +153,10 @@ export const postStore = defineStore('postStore', {
 				)
 				if (updatePostResponse.data.result === 'failed') {
 					this.status = 'failed'
-					console.log(updatePostResponse.data.data)
+					this.err = updatePostResponse.data.data
 				} else {
 					this.status = 'success'
 				}
-				console.log('Post updated successfully:', updatePostResponse.data)
 			} catch (error) {
 				console.error('Error updating post:', error)
 			}
@@ -192,7 +180,6 @@ export const postStore = defineStore('postStore', {
 	},
 	getters: {
 		getRenderingPosts(): Post[] {
-			console.log( pagesStore().docPage )
 			return this.postList
 		}
 	}
