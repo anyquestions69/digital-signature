@@ -9,8 +9,19 @@
 			</p>
 		</div>
 	</div>
+	<<<<<<< HEAD
 	<component :is="PDF" :src="pdfSrc" v-if="pdfSrc" class="box main__pdf" />
 	<p v-else>Документ не загружен или не найден!</p>
+	=======
+	<component
+		:is="PDF"
+		:src="pdfSrc"
+		v-if="pdfSrc"
+		style="height: 700px"
+		class="box main__pdf"
+	/>
+	<p v-else>Документ не загружен или не найден!</p>
+	>>>>>>> 4f028da00039238b359157383720a313c577401a
 	<form v-if="!isSuccessStatus && pdfSrc" class="status__form">
 		<button type="button">
 			Поставить подпись
