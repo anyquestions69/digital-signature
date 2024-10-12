@@ -2,6 +2,11 @@ import { defineStore } from "pinia";
 
 export const pagesStore = defineStore('pagesStore', {
     state: () => ({
+        docPage: {
+            selectedValue: '2',
+            searchValue: '',
+            docsCount: 6
+        },
         clientPage: {
             isOpenEditor: false,
             navVariant: 0,
@@ -45,6 +50,11 @@ export const pagesStore = defineStore('pagesStore', {
         },
         editClientInfo() {
             this.toggleEditor()
+        },
+
+        //actions to DocPage
+        addCounter() {
+            this.docPage.docsCount += 6
         }
     }
 })

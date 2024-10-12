@@ -1,22 +1,11 @@
 <template>
 	<div class="main-documents__body">
 		<div class="document_nav-panel">
-			<select name="" id="">
-				<option value="">Наименование</option>
-				<option value="">Должностное лицо</option>
-				<option value="" selected>Дата</option>
-			</select>
-			<div>
-				<input type="text" />
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-					<path
-						d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
-					/>
-				</svg>
-			</div>
+			<DocSelectForm />
+			<DocSearchForm />
 		</div>
 		<ul class="document__list">
-			<li v-for="elem in PostStore.postList" :key="elem.id" class="list__elem">
+			<li v-for="elem in PostList" :key="elem.id" class="list__elem">
 				<div class="elem__text">
 					<div>
 						<p>{{ elem.title }}</p>
@@ -44,19 +33,25 @@
 				</RouterLink>
 			</li>
 		</ul>
-		<button class="document__btn">Показать ещё...</button>
+		<button class="document__btn" @click="PagesStore.addCounter()">Показать ещё...</button>
 	</div>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import { onMounted, ref } from 'vue'
 import { authStore } from '../../../store/authStore'
 import { postStore } from '../../../store/postStore'
+import { pagesStore } from '../../../store/pagesStore'
+
+import DocSelectForm from './DocSelectForm.vue'
+import DocSearchForm from './DocSearchForm.vue'
 
 const AuthStore = authStore()
 const PostStore = postStore()
+const PagesStore = pagesStore()
 
 // Реактивный объект для хранения начальников
 const chiefs = ref<{ [key: number]: string }>({})
@@ -76,6 +71,8 @@ onMounted(async () => {
 	await PostStore.getPostList()
 	await fetchChiefs()
 })
+
+const PostList = computed( () => PostStore.getRenderingPosts )
 </script>
 
 <style lang="scss">

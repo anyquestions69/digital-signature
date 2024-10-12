@@ -2,6 +2,7 @@
   <div class="wrapper">
     <RouterView />
   </div>
+  dsgdsgsegd
 </template>
 
 <script setup lang="ts">
