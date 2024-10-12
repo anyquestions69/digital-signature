@@ -13,6 +13,7 @@
 			:is="PDF"  
 			:src="pdfSrc"
 			v-if="pdfSrc"
+			style="height: 700px;"
 			class="box main__pdf"
 		/>
 	<p v-else> Документ не загружен или не найден! </p>
@@ -77,7 +78,7 @@ const handleKeyFileChange = async (event: Event) => {
 </script>
 
 
-<style lang="scss" scoped>
+<style lang="scss">
 .pdf__status {
 	margin-top: 100px;
 	width: 100%;
@@ -99,7 +100,17 @@ const handleKeyFileChange = async (event: Event) => {
 	z-index: 100;
 
 	.pdf-vue3-pageTooltip {
-		translate: 0 -100px;
+		background: transparent !important;
+	}
+
+	.pdf-vue3-backToTopBtn {
+		div {
+			cursor: pointer;
+
+			svg {
+				background: transparent;
+			}
+		}
 	}
 }
 
