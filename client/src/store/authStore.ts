@@ -33,7 +33,8 @@ export const authStore = defineStore('authStore', {
 		division: '',
 		key: '',
 		token: '',
-		status: ''
+		status: '',
+		err: ''
 	}),
 
 	actions: {
@@ -46,6 +47,7 @@ export const authStore = defineStore('authStore', {
 
 				if (regResponse.data.result === 'failed') {
 					this.status = 'failed'
+					this.err = regResponse.data.data
 				} else {
 					this.key = regResponse.data.key
 					this.token = regResponse.data.token
@@ -55,7 +57,8 @@ export const authStore = defineStore('authStore', {
 					this.id = regResponse.data.data.id
 				}
 			} catch (err: any) {
-				console.info(`Unexpected error: ${err.message}`)
+				this.status = 'failed'
+				this.err = `Unexpected error: ${err.message}`
 			}
 		},
 
@@ -68,7 +71,7 @@ export const authStore = defineStore('authStore', {
 
 				if (logResponse.data.result === 'failed') {
 					this.status = 'failed'
-					console.log(logResponse.data.data)
+					this.err = logResponse.data.data
 				} else {
 					this.token = logResponse.data.access_token
 					this.status = 'success'
@@ -77,7 +80,8 @@ export const authStore = defineStore('authStore', {
 					await this.getUser(this.id)
 				}
 			} catch (err: any) {
-				console.info(`Unexpected error: ${err.message}`)
+				this.status = 'failed'
+				this.err = `Unexpected error: ${err.message}`
 			}
 		},
 
@@ -87,6 +91,7 @@ export const authStore = defineStore('authStore', {
 
 				if (userResponse.data.result === 'failed') {
 					this.status = 'failed'
+					this.err = userResponse.data.data
 				} else {
 					this.username = userResponse.data.username
 					this.name = userResponse.data.name
@@ -95,12 +100,9 @@ export const authStore = defineStore('authStore', {
 					this.division = userResponse.data.division
 					this.status = 'success'
 				}
-			} catch (error: unknown) {
-				if (error instanceof Error) {
-					console.info(error.message)
-				} else {
-					console.error('Неизвестная ошибка:', error)
-				}
+			} catch (err: any) {
+				this.status = 'failed'
+				this.err = `Unexpected error: ${err.message}`
 			}
 		},
 
@@ -108,7 +110,7 @@ export const authStore = defineStore('authStore', {
 			try {
 				if (!this.id) {
 					this.status = 'failed'
-					console.error('Пользователь не зарегистрирован')
+					this.err = 'Пользователь не зарегистрирован'
 				}
 				const editData = {
 					name: editConfig.name,
@@ -131,10 +133,11 @@ export const authStore = defineStore('authStore', {
 					this.status = 'success'
 				} else {
 					this.status = 'failed'
-					console.error('Ошибка при обновлении данных пользователя')
+					this.err = 'Ошибка при обновлении данных пользователя'
 				}
-			} catch (error) {
-				console.error('Ошибка изменения информации пользователя:', error)
+			} catch (err: any) {
+				this.status = 'failed'
+				this.err = `Unexpected error: ${err.message}`
 			}
 		},
 
@@ -153,6 +156,7 @@ export const authStore = defineStore('authStore', {
 			this.status = ''
 			this.post = ''
 			this.division = ''
+			this.err = ''
 		}
 	},
 	getters: {
