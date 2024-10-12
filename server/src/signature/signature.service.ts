@@ -58,8 +58,7 @@ export class SignatureService {
 					data: { delivered: true },
 					where: { id: post.id }
 				})
-				//TODO:
-				//триггер для отправки админу о delivered
+				console.log('Socket')
 				this.PostGateway.notifyAdmin(post.id)
 			}
 			return {
@@ -73,7 +72,7 @@ export class SignatureService {
 			}
 		}
 	}
-	//TODO: for what?
+
 	checkSignature(username, hash) {
 		this.rsa.checkSignature(username, hash)
 	}

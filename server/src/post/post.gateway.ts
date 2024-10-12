@@ -1,12 +1,23 @@
 import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets'
 import { Server } from 'socket.io'
 
-@WebSocketGateway()
+@WebSocketGateway({
+	cors: {
+		origin: process.env.CORS_ORIGIN || '*',
+		methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+		allowedHeaders: ['Content-Type', 'Authorization']
+	}
+})
 export class PostGateway {
 	@WebSocketServer()
 	server: Server
 
 	notifyAdmin(postId: number) {
-		this.server.emit('postSigned', { postId })
+		const message = `Приказ доведен все расписались`
+
+		this.server.emit('postSigned', {
+			postId: postId,
+			message: message
+		})
 	}
 }

@@ -10,7 +10,7 @@ async function bootstrap() {
 	// Настройка CORS
 	const corsOptions = {
 		origin: process.env.CORS_ORIGIN || '*',
-		methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+		methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
 		allowedHeaders: ['Content-Type', 'Authorization']
 	}
 

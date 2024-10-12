@@ -9,13 +9,8 @@
 			</p>
 		</div>
 	</div>
-	<component
-			:is="PDF"  
-			:src="pdfSrc"
-			v-if="pdfSrc"
-			class="box main__pdf"
-		/>
-	<p v-else> Документ не загружен или не найден! </p>
+	<component :is="PDF" :src="pdfSrc" v-if="pdfSrc" class="box main__pdf" />
+	<p v-else>Документ не загружен или не найден!</p>
 	<form v-if="!isSuccessStatus && pdfSrc" class="status__form">
 		<button type="button">
 			Поставить подпись
@@ -25,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import PDF from "pdf-vue3";
+import PDF from 'pdf-vue3'
 
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
@@ -39,45 +34,44 @@ const pdfSrc = ref<string | null>(null)
 const isSuccessStatus = ref(false)
 const route = useRoute()
 const PostStore = postStore()
-const postId = Number( route.params.id )
+const postId = Number(route.params.id)
 
 onMounted(async () => {
-  try {
-    await PostStore.getPost(postId)
-    isSuccessStatus.value = PostStore.checkSig(AuthStore.id)
-    
-    const base64Pdf = PostStore.post.content || null
-    
-    if (base64Pdf) {
-      pdfSrc.value = `data:application/pdf;base64,${base64Pdf}`
-    } else {
-      console.error('PDF не найден или не загружен.')
-    }
-  } catch (error) {
-    console.error('Ошибка при получении поста:', error)
-  }
+	try {
+		await PostStore.getPost(postId)
+		isSuccessStatus.value = PostStore.checkSig(AuthStore.id)
+
+		const base64Pdf = PostStore.post.content || null
+
+		if (base64Pdf) {
+			pdfSrc.value = `data:application/pdf;base64,${base64Pdf}`
+		} else {
+			console.error('PDF не найден или не загружен.')
+		}
+	} catch (error) {
+		console.error('Ошибка при получении поста:', error)
+	}
 })
 
 const handleKeyFileChange = async (event: Event) => {
-  const target = event.target as HTMLInputElement
-  if (target.files && target.files[0]) {
-    keyFile.value = target.files[0]
-    try {
-      await PostStore.subscribePost({ id: postId, key: keyFile.value })
-      if (PostStore.status === 'success') {
-        isSuccessStatus.value = true
-      } else {
-        console.error('Ошибка при подписке: Не удалось поставить ЭЦП')
-      }
-    } catch (error) {
-      console.error('Ошибка при подписке:', error)
-    }
-  }
+	const target = event.target as HTMLInputElement
+	if (target.files && target.files[0]) {
+		keyFile.value = target.files[0]
+		try {
+			await PostStore.subscribePost({ id: postId, key: keyFile.value })
+			if (PostStore.status === 'success') {
+				isSuccessStatus.value = true
+			} else {
+				console.error('Ошибка при подписке: Не удалось поставить ЭЦП')
+			}
+		} catch (error) {
+			console.error('Ошибка при подписке:', error)
+		}
+	}
 }
 </script>
 
-
-<style lang="scss" scoped>
+<style lang="scss">
 .pdf__status {
 	margin-top: 100px;
 	width: 100%;
@@ -99,7 +93,17 @@ const handleKeyFileChange = async (event: Event) => {
 	z-index: 100;
 
 	.pdf-vue3-pageTooltip {
-		translate: 0 -100px;
+		background: transparent !important;
+	}
+
+	.pdf-vue3-backToTopBtn {
+		div {
+			cursor: pointer;
+
+			svg {
+				background: transparent;
+			}
+		}
 	}
 }
 
