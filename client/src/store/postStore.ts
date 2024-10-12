@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { defineStore } from 'pinia'
 import { authStore } from './authStore'
+import { pagesStore } from './pagesStore'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:3000/api'
 
@@ -187,6 +188,12 @@ export const postStore = defineStore('postStore', {
 				(this.post = {} as Post),
 				(this.status = 'success'),
 				(this.subscribers = [] as string[])
+		}
+	},
+	getters: {
+		getRenderingPosts(): Post[] {
+			console.log( pagesStore().docPage )
+			return this.postList
 		}
 	}
 })
