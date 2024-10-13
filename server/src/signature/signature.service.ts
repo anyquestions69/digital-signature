@@ -58,7 +58,6 @@ export class SignatureService {
 					data: { delivered: true },
 					where: { id: post.id }
 				})
-				console.log('Socket')
 				this.PostGateway.notifyAdmin(post.id)
 			}
 			return {
