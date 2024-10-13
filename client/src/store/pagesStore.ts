@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 export const pagesStore = defineStore('pagesStore', {
     state: () => ({
         docPage: {
-            selectedValue: '2',
+            selectedValue: '0',
             searchValue: '',
             docsCount: 6
         },

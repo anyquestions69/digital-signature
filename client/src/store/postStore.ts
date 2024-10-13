@@ -188,12 +188,34 @@ export const postStore = defineStore('postStore', {
 				(this.post = {} as Post),
 				(this.status = 'success'),
 				(this.subscribers = [] as string[])
+		},
+		parseDate( dateString: string ) : Date {
+			const [day, month, year] = dateString.split('.').map(Number);
+			return new Date(year, month - 1, day);
 		}
 	},
 	getters: {
 		getRenderingPosts(): Post[] {
-			console.log( pagesStore().docPage )
-			return this.postList
+			var PostList = this.postList
+
+			if( pagesStore().docPage.selectedValue === '0' ) {
+				//сортировка по наименованию
+				PostList = PostList.sort( (a, b) => a.title.localeCompare(b.title) )
+			} else if ( pagesStore().docPage.selectedValue === '1' ) {
+				//сортировка по должностному лицу
+				PostList = PostList.sort( (a, b) => a.userId - b.userId )
+			} else {
+				//Сортировка по дате
+				PostList = PostList.sort( (a, b) => new Date( b.date ).getTime() - new Date( a.date ).getTime() )
+			}
+
+			if ( pagesStore().docPage.searchValue ) {
+				return PostList.filter( elem => elem.title.toLowerCase().includes( pagesStore().docPage.searchValue.toLowerCase() )
+										 || elem.date.toLowerCase().includes( pagesStore().docPage.searchValue.toLowerCase() )
+										 || elem.date.toLowerCase().includes( pagesStore().docPage.searchValue.toLowerCase() ) )
+			}
+			
+			return PostList
 		}
 	}
 })
