@@ -30,7 +30,12 @@
 				</RouterLink>
 			</li>
 		</ul>
-		<button class="document__btn" @click="nextPage">Показать ещё...</button>
+		<button class="document__btn" @click="nextPage" v-if="PostStore.scroll">
+			Следующая...
+		</button>
+		<button class="document__btn" @click="prevPage" v-if="page > 1">
+			Предыдущая...
+		</button>
 	</div>
 </template>
 
