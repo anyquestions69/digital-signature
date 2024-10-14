@@ -2,9 +2,13 @@ import { defineStore } from "pinia"
 
 export const pagesStore = defineStore('pagesStore', {
     state: () => ({
+        pdfPage: {
+            listIsOpen: false,
+        },
         docPage: {
             selectedValue: '2',
-            searchValue: ''
+            searchValue: '',
+            editFormIsOpen: false
         },
         clientPage: {
             isOpenEditor: false,
@@ -49,6 +53,16 @@ export const pagesStore = defineStore('pagesStore', {
         },
         editClientInfo() {
             this.toggleEditor()
+        },
+
+        //actions to PdfPage
+        togglePersonPdfList() {
+            this.pdfPage.listIsOpen = !this.pdfPage.listIsOpen
+        },
+
+        //actions to DocPage
+        toggleDocEditForm() {
+            this.docPage.editFormIsOpen = !this.docPage.editFormIsOpen
         }
     }
 })

@@ -4,24 +4,23 @@
 		<DocBody />
 	</main>
 	<Footer />
+	<DocEditForm v-if="pagesStore().docPage.editFormIsOpen" />
 </template>
 
 <script setup lang="ts">
 import DocBody from './components/Doc/DocBody.vue'
 import Footer from './components/Footer/Footer.vue'
 import Header from './components/Header/Header.vue'
+import DocEditForm from './components/Doc/DocEditForm.vue';
+
+import { pagesStore } from '../store/pagesStore';
 
 const headerContent = {
 	button: {
 		to: '/client',
 		text: 'Личный кабинет'
 	},
-	nav: [
-		{
-			id: 0,
-			text: 'Документы'
-		}
-	]
+	nav: []
 }
 </script>
 
