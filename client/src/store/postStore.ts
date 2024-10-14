@@ -2,6 +2,8 @@ import axios from 'axios'
 import { defineStore } from 'pinia'
 import { authStore } from './authStore'
 import { pagesStore } from './pagesStore'
+import { format } from 'date-fns'
+import { ru, th } from 'date-fns/locale'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:3000/api'
 
@@ -14,6 +16,13 @@ interface Post {
 	delivered?: boolean
 	signatures: Array<User>
 	userId: number
+}
+
+interface GettingPost {
+	id: number,
+	title: string,
+	author: string | Promise<any>,
+	date: string
 }
 
 interface User {
@@ -177,35 +186,43 @@ export const postStore = defineStore('postStore', {
 				(this.post = {} as Post),
 				(this.status = 'success'),
 				(this.subscribers = [] as string[])
-		},
-		parseDate( dateString: string ) : Date {
-			const [day, month, year] = dateString.split('.').map(Number);
-			return new Date(year, month - 1, day);
 		}
 	},
 	getters: {
-		getRenderingPosts(): Post[] {
-			var PostList = this.postList
+		getRenderingPosts():GettingPost[] {
+			if ( this.postList ) {
+				let PostList
 
-			if( pagesStore().docPage.selectedValue === '0' ) {
-				//сортировка по наименованию
-				PostList = PostList.sort( (a, b) => a.title.localeCompare(b.title) )
-			} else if ( pagesStore().docPage.selectedValue === '1' ) {
-				//сортировка по должностному лицу
-				PostList = PostList.sort( (a, b) => a.userId - b.userId )
-			} else {
-				//Сортировка по дате
-				PostList = PostList.sort( (a, b) => new Date( b.date ).getTime() - new Date( a.date ).getTime() )
+				if( pagesStore().docPage.selectedValue === '0' ) {
+					//сортировка по наименованию
+					PostList = this.postList.sort( (a, b) => a.title.localeCompare(b.title) )
+				} else if ( pagesStore().docPage.selectedValue === '1' ) {
+					//сортировка по должностному лицу
+					PostList = this.postList.sort( (a, b) => a.userId - b.userId )
+				} else {
+					//Сортировка по дате
+					PostList = this.postList.sort( (a, b) => new Date( b.date ).getTime() - new Date( a.date ).getTime() )
+				}
+
+				PostList = PostList.map( elem => {
+					return {
+						id: elem.id,
+						title: elem.title,
+						author: authStore().getChief(elem.userId),
+						date: format( elem.date, 'dd.MM.yyyy', { locale: ru })
+					}
+				} )
+
+				if ( pagesStore().docPage.searchValue ) {
+					PostList = PostList.filter( elem => elem.title.toLowerCase().includes( pagesStore().docPage.searchValue.toLowerCase() )
+											|| elem.date.toLowerCase().includes( pagesStore().docPage.searchValue.toLowerCase() )
+											|| elem.date.toLowerCase().includes( pagesStore().docPage.searchValue.toLowerCase() ) )
+				}
+				
+				return PostList
 			}
 
-			if ( pagesStore().docPage.searchValue ) {
-				return PostList.filter( elem => elem.title.toLowerCase().includes( pagesStore().docPage.searchValue.toLowerCase() )
-										 || elem.date.toLowerCase().includes( pagesStore().docPage.searchValue.toLowerCase() )
-										 || elem.date.toLowerCase().includes( pagesStore().docPage.searchValue.toLowerCase() ) )
-			}
-			
-			return PostList
-
+			return []
 		}
 	}
 })

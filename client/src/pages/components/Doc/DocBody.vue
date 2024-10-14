@@ -11,10 +11,10 @@
 						<p>{{ elem.title }}</p>
 						<p>
 							Должностное лицо:
-							<span>{{ chiefs[elem.id] || 'Загрузка...' }}</span>
+							<span>{{ elem.author || 'Загрузка...' }}</span>
 						</p>
 						<p>
-							Дата: <span>{{ formatDate(elem.date) || 'Загрузка...' }}</span>
+							Дата: <span>{{ elem.date || 'Загрузка...' }}</span>
 						</p>
 					</div>
 				</div>
@@ -37,42 +37,25 @@
 </template>
 
 <script setup lang="ts">
-import { format } from 'date-fns'
-import { ru } from 'date-fns/locale'
 import { computed, onMounted, ref } from 'vue'
-import { authStore } from '../../../store/authStore'
 import { postStore } from '../../../store/postStore'
 
 import DocSearchForm from './DocSearchForm.vue'
 import DocSelectForm from './DocSelectForm.vue'
 
-const AuthStore = authStore()
 const PostStore = postStore()
 
-const chiefs = ref<{ [key: number]: string }>({})
 const page = ref(1)
 const limit = 7
 
-const formatDate = (date: any) => {
-	return format(date, 'dd.MM.yyyy', { locale: ru })
-}
-
-const fetchChiefs = async () => {
-	for (const post of PostStore.postList) {
-		const name = await AuthStore.getChief(post.userId)
-		chiefs.value[post.id] = name
-	}
-}
 
 onMounted(async () => {
 	await PostStore.getPostList(page.value, limit)
-	await fetchChiefs()
 })
 
 const loadMorePosts = async () => {
 	page.value += 1
 	await PostStore.getPostList(page.value, limit)
-	await fetchChiefs()
 }
 
 const PostList = computed(() => PostStore.getRenderingPosts)
