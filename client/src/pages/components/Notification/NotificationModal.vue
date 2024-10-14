@@ -21,23 +21,39 @@ const close = () => {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .modal-backdrop {
 	position: fixed;
 	top: 0;
-	left: 0;
+	right: 0;
 	width: 100vw;
 	height: 100vh;
-	background: rgba(0, 0, 0, 0.5);
+	backdrop-filter: blur(7.5px);
+	background: rgba(0, 0, 0, 0.4);
+
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	// justify-content: end;
+	// align-items: end;
 }
 .modal {
+	// position: relative;
+	// right: 30px;
+	// bottom: 30px;
 	background: transparent;
 	padding: 20px;
 	border-radius: 5px;
-	box-shadow: 0px 0px 4px rgb(255, 255, 255, 0.5);
+	box-shadow: 0px 0px 5px rgb(255, 255, 255, 0.5);
+
+	h3 {
+		background: transparent;
+	}
+
+	p {
+		background: transparent;
+		margin-top: 8px;
+	}
 }
 button {
 	margin-top: 10px;

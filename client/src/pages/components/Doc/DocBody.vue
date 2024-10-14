@@ -30,8 +30,11 @@
 				</RouterLink>
 			</li>
 		</ul>
-		<button class="document__btn" @click="loadMorePosts">
-			Показать ещё...
+		<button class="document__btn" @click="nextPage" v-if="PostStore.scroll">
+			Следующая...
+		</button>
+		<button class="document__btn" @click="prevPage" v-if="page > 1">
+			Предыдущая...
 		</button>
 	</div>
 </template>
@@ -53,9 +56,18 @@ onMounted(async () => {
 	await PostStore.getPostList(page.value, limit)
 })
 
-const loadMorePosts = async () => {
-	page.value += 1
-	await PostStore.getPostList(page.value, limit)
+const nextPage = async () => {
+	if (PostStore.scroll) {
+		page.value += 1
+		await PostStore.getPostList(page.value, limit)
+	}
+}
+
+const prevPage = async () => {
+	if (page.value !== 1) {
+		page.value -= 1
+		await PostStore.getPostList(page.value, limit)
+	}
 }
 
 const PostList = computed(() => PostStore.getRenderingPosts)

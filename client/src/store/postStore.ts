@@ -50,7 +50,8 @@ export const postStore = defineStore('postStore', {
 		post: {} as Post,
 		status: 'success',
 		err: '',
-		subscribers: [] as Object[]
+		subscribers: [] as Object[],
+		scroll: false
 	}),
 
 	actions: {
@@ -59,7 +60,15 @@ export const postStore = defineStore('postStore', {
 				const postListResponse = await axios.get(`${BASE_URL}/post`, {
 					params: { page: page, limit: limit }
 				})
-				this.postList = postListResponse.data.data
+				if (postListResponse.data.result === 'failed') {
+					this.status = 'failed'
+					this.err = postListResponse.data.data
+				} else {
+					this.status = 'success'
+					this.postList = postListResponse.data.data
+					this.scroll = postListResponse.data.scroll
+				}
+				
 			} catch (error) {
 				console.error('Error fetching post list:', error)
 			}
@@ -185,7 +194,12 @@ export const postStore = defineStore('postStore', {
 			;(this.postList = [] as Post[]),
 				(this.post = {} as Post),
 				(this.status = 'success'),
-				(this.subscribers = [] as string[])
+				(this.subscribers = [] as string[]),
+				(this.scroll = false)
+		},
+		parseDate( dateString: string ) : Date {
+			const [day, month, year] = dateString.split('.').map(Number);
+			return new Date(year, month - 1, day);
 		}
 	},
 	getters: {

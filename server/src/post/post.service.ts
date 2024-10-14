@@ -66,7 +66,8 @@ export class PostService {
 					}
 				}
 			})
-
+			const scroll =
+				(await this.prisma.post.findMany()).length - skip * take > 0
 			const payloads = posts.map(post => ({
 				id: post.id,
 				title: post.title,
@@ -80,7 +81,8 @@ export class PostService {
 
 			return {
 				result: 'success',
-				data: payloads
+				data: payloads,
+				scroll: scroll
 			}
 		} catch (error) {
 			return {
