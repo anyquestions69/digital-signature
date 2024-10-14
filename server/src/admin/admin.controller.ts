@@ -3,6 +3,7 @@ import {
 	Controller,
 	Delete,
 	ForbiddenException,
+	Get,
 	Param,
 	Patch,
 	Post,
@@ -37,12 +38,21 @@ export class AdminController {
 		@Request() req
 	) {
 		if (req.user.role !== 'Admin') {
-			console.log(req.user.role)
 			throw new ForbiddenException('Not admin')
 		}
 
-
 		return this.postService.create(req.user.userId, createPostDto, file)
+	}
+
+	@Get('subs/:postId')
+	getSubs(@Param('postId') postId: string, @Request() req) {
+		if (req.user.role !== 'Admin') {
+			return {
+				result: 'failed',
+				data: 'Отказано в доступе'
+			}
+		}
+		return this.userService.getSubs(+postId)
 	}
 
 	@Patch('post/:id')

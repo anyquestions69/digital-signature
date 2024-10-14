@@ -14,11 +14,6 @@ export class SignatureService {
 	) {}
 	async create(postId: number, file: Express.Multer.File, req) {
 		try {
-			console.log(postId)
-			console.log('------------------')
-			console.log(file)
-			// console.log('------------------')
-			// console.log(req)
 			const key = Buffer.from(file.buffer).toLocaleString()
 			const post = await this.postService.service(postId)
 			if (!post)

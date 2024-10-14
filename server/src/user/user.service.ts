@@ -23,6 +23,44 @@ export class UserService {
 		return this.prisma.user.findMany({ omit: { password: true } })
 	}
 
+	async getSubs(postId: number) {
+		try {
+			const users = await this.prisma.user.findMany({
+				select: {
+					id: true,
+					name: true
+				}
+			})
+
+			const signedUsers = await this.prisma.signature.findMany({
+				where: {
+					postId: postId
+				},
+				select: {
+					userId: true
+				}
+			})
+
+			const signedUserIds = new Set(
+				signedUsers.map(signature => signature.userId)
+			)
+			const result = users.map(user => ({
+				name: user.name,
+				signed: signedUserIds.has(user.id)
+			}))
+
+			return {
+				result: 'success',
+				data: result
+			}
+		} catch (err) {
+			return {
+				result: 'failed',
+				data: err.message
+			}
+		}
+	}
+
 	findOne(id: number) {
 		return this.prisma.user.findFirst({
 			where: { id },

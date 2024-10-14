@@ -51,7 +51,6 @@ const PostStore = postStore()
 const page = ref(1)
 const limit = 7
 
-
 onMounted(async () => {
 	await PostStore.getPostList(page.value, limit)
 })
