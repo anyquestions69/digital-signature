@@ -51,8 +51,6 @@ const exitFromSys = () => {
 	router.push('/api/auth')
 }
 
-console.log(AuthStore.role)
-
 const filteredNavList = computed(() => {
 	return PagesStore.clientPage.navList.filter(item => {
 		return !item.role || item.role === AuthStore.role
