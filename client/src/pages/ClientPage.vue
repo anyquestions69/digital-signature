@@ -8,6 +8,7 @@
 
 	<!-- Модальное окно для уведомлений -->
 	<NotificationModal v-if="showNotification" :message="notificationMessage" />
+	<!-- <NotificationModal  :message="`Приказ 23 был всеми подписан, Ура, товарищи!`" /> -->
 </template>
 
 <script setup lang="ts">
