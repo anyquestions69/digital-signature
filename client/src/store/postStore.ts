@@ -1,9 +1,9 @@
 import axios from 'axios'
+import { format } from 'date-fns'
+import { ru } from 'date-fns/locale'
 import { defineStore } from 'pinia'
 import { authStore } from './authStore'
 import { pagesStore } from './pagesStore'
-import { format } from 'date-fns'
-import { ru, th } from 'date-fns/locale'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:3000/api'
 
@@ -15,13 +15,14 @@ interface Post {
 	date: string
 	delivered?: boolean
 	signatures: Array<User>
+	userName: string
 	userId: number
 }
 
 interface GettingPost {
-	id: number,
-	title: string,
-	author: string | Promise<any>,
+	id: number
+	title: string
+	author: string
 	date: string
 }
 
@@ -44,14 +45,23 @@ interface SubscribeConfig {
 	key: File
 }
 
+interface Subscribers {
+	success: { id: number; name: string }[]
+	failed: { id: number; name: string }[]
+}
+
 export const postStore = defineStore('postStore', {
 	state: () => ({
 		postList: [] as Post[],
 		post: {} as Post,
 		status: 'success',
 		err: '',
-		subscribers: [] as Object[],
-		scroll: false
+		subscribers: { success: [], failed: [] } as Subscribers,
+		scroll: false,
+		temp: {
+			id: 0,
+			title: ''
+		}
 	}),
 
 	actions: {
@@ -65,10 +75,17 @@ export const postStore = defineStore('postStore', {
 					this.err = postListResponse.data.data
 				} else {
 					this.status = 'success'
-					this.postList = postListResponse.data.data
+					const processedPostList = await Promise.all(
+						//@ts-ignore
+						postListResponse.data.data.map(async post => {
+							const userName = await this.getChief(post.userId)
+							return { ...post, userName }
+						})
+					)
+
+					this.postList = processedPostList
 					this.scroll = postListResponse.data.scroll
 				}
-				
 			} catch (error) {
 				console.error('Error fetching post list:', error)
 			}
@@ -126,10 +143,6 @@ export const postStore = defineStore('postStore', {
 				if (subscribePostResponse.data.result === 'failed') {
 					this.status = 'failed'
 				} else {
-					this.subscribers.push({
-						id: subscribePostResponse.data.signatures.user.id,
-						name: subscribePostResponse.data.signatures.user.name
-					})
 					this.status = 'success'
 				}
 			} catch (error) {
@@ -139,17 +152,18 @@ export const postStore = defineStore('postStore', {
 
 		async deletePost(id: number) {
 			try {
+				console.log(`del - ${id}`)
 				const deletePostResponse = await axios.delete(
 					`${BASE_URL}/admin/post/${id}`,
 					{
 						headers: {
-							'Content-Type': 'multipart/form-data',
 							Authorization: `Bearer ${authStore().token}`
 						}
 					}
 				)
 				if (deletePostResponse.data.result === 'failed') {
 					this.status = 'failed'
+					this.err = deletePostResponse.data.data
 				} else {
 					this.status = 'success'
 				}
@@ -162,10 +176,10 @@ export const postStore = defineStore('postStore', {
 			try {
 				const updatePostResponse = await axios.patch(
 					`${BASE_URL}/admin/post/${id}`,
-					title,
+					{ title: title },
 					{
 						headers: {
-							'Content-Type': 'multipart/form-data',
+							'Content-Type': 'application/json',
 							Authorization: `Bearer ${authStore().token}`
 						}
 					}
@@ -189,50 +203,117 @@ export const postStore = defineStore('postStore', {
 				)
 			return userExists
 		},
+		async getChief(id: number) {
+			const userResponse = await axios.get(`${BASE_URL}/user/${id}`)
+			return userResponse.data.name
+		},
+
+		async getSubs(postId: number) {
+			try {
+				const getSubsResponse = await axios.get(
+					`${BASE_URL}/admin/subs/${postId}`,
+					{
+						headers: {
+							Authorization: `Bearer ${authStore().token}`
+						}
+					}
+				)
+
+				if (getSubsResponse.data.result === 'failed') {
+					this.status = 'failed'
+					this.err = getSubsResponse.data.data
+					return
+				}
+
+				const subscribers = getSubsResponse.data.data
+				if (!Array.isArray(subscribers)) {
+					this.status = 'failed'
+					this.err = 'Unexpected data format'
+					return
+				}
+
+				this.status = 'success'
+
+				const personList: Subscribers = subscribers.reduce<Subscribers>(
+					(acc, user) => {
+						if (user.signed) {
+							acc.success.push({ id: user.id, name: user.name })
+						} else {
+							acc.failed.push({ id: user.id, name: user.name })
+						}
+						return acc
+					},
+					{ success: [], failed: [] }
+				)
+
+				this.subscribers = personList
+			} catch (error) {
+				this.status = 'failed'
+				this.err = 'Error fetching subscribers' // Сообщение об ошибке
+				console.error('Error fetching subscribers:', error)
+			}
+		},
 
 		sysExit() {
 			;(this.postList = [] as Post[]),
 				(this.post = {} as Post),
 				(this.status = 'success'),
-				(this.subscribers = [] as string[]),
-				(this.scroll = false)
+				(this.subscribers = { success: [], failed: [] } as Subscribers),
+				(this.scroll = false),
+				(this.temp = {
+					id: 0,
+					title: ''
+				})
 		},
-		parseDate( dateString: string ) : Date {
-			const [day, month, year] = dateString.split('.').map(Number);
-			return new Date(year, month - 1, day);
+		parseDate(dateString: string): Date {
+			const [day, month, year] = dateString.split('.').map(Number)
+			return new Date(year, month - 1, day)
 		}
 	},
 	getters: {
-		getRenderingPosts():GettingPost[] {
-			if ( this.postList ) {
+		getRenderingPosts(): GettingPost[] {
+			if (this.postList) {
 				let PostList
 
-				if( pagesStore().docPage.selectedValue === '0' ) {
+				if (pagesStore().docPage.selectedValue === '0') {
 					//сортировка по наименованию
-					PostList = this.postList.sort( (a, b) => a.title.localeCompare(b.title) )
-				} else if ( pagesStore().docPage.selectedValue === '1' ) {
+					PostList = this.postList.sort((a, b) =>
+						a.title.localeCompare(b.title)
+					)
+				} else if (pagesStore().docPage.selectedValue === '1') {
 					//сортировка по должностному лицу
-					PostList = this.postList.sort( (a, b) => a.userId - b.userId )
+					PostList = this.postList.sort((a, b) => a.userId - b.userId)
 				} else {
 					//Сортировка по дате
-					PostList = this.postList.sort( (a, b) => new Date( b.date ).getTime() - new Date( a.date ).getTime() )
+					PostList = this.postList.sort(
+						(a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+					)
 				}
 
-				PostList = PostList.map( elem => {
+				PostList = PostList.map(elem => {
 					return {
 						id: elem.id,
 						title: elem.title,
-						author: authStore().getChief(elem.userId),
-						date: format( elem.date, 'dd.MM.yyyy', { locale: ru })
+						author: elem.userName,
+						date: format(elem.date, 'dd.MM.yyyy', { locale: ru })
 					}
-				} )
+				})
 
-				if ( pagesStore().docPage.searchValue ) {
-					PostList = PostList.filter( elem => elem.title.toLowerCase().includes( pagesStore().docPage.searchValue.toLowerCase() )
-											|| elem.date.toLowerCase().includes( pagesStore().docPage.searchValue.toLowerCase() )
-											|| elem.date.toLowerCase().includes( pagesStore().docPage.searchValue.toLowerCase() ) )
+				if (pagesStore().docPage.searchValue) {
+					PostList = PostList.filter(
+						elem =>
+							elem.title
+								.toLowerCase()
+								.includes(pagesStore().docPage.searchValue.toLowerCase()) ||
+							elem.author
+								.toLowerCase()
+								.includes(pagesStore().docPage.searchValue.toLowerCase()) ||
+							elem.date
+								.toLowerCase()
+								.includes(pagesStore().docPage.searchValue.toLowerCase())
+					)
 				}
-				
+
 				return PostList
 			}
 

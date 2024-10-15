@@ -6,7 +6,6 @@
 	<Footer />
 	<ClientEditPersonalInfo v-if="PagesStore.clientPage.isOpenEditor" />
 
-	<!-- Модальное окно для уведомлений -->
 	<NotificationModal v-if="showNotification" :message="notificationMessage" />
 	<!-- <NotificationModal  :message="`Приказ 23 был всеми подписан, Ура, товарищи!`" /> -->
 </template>
@@ -52,7 +51,6 @@ onMounted(() => {
 	if (role === 'Admin') {
 		socket.on('postSigned', (data: { postId: number; message: string }) => {
 			PostStore.getPost(data.postId)
-			console.log(PostStore.post)
 			console.log(`Приказ ${PostStore.post.title}  ${data.message}`)
 			showNotificationModal(`Приказ ${PostStore.post.title}  ${data.message}`)
 		})

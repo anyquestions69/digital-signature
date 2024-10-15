@@ -137,6 +137,7 @@
 				Войти
 			</button>
 		</form>
+		<NotificationModal v-if="showNotification" :message="notificationMessage" />
 	</div>
 </template>
 
@@ -145,6 +146,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { authStore } from '../../../store/authStore.ts'
+import NotificationModal from '../Notification/NotificationModal.vue'
 
 const router = useRouter()
 const AuthStore = authStore()
@@ -159,6 +161,14 @@ const isFocusPassword = ref(false)
 const isFocusRePassword = ref(false)
 
 const isCliced = ref(false)
+
+const showNotification = ref(false)
+const notificationMessage = ref('')
+
+const showNotificationModal = (message: string) => {
+	notificationMessage.value = message
+	showNotification.value = true
+}
 
 const upUsernameInput = () => {
 	isFocusUsername.value = true
@@ -196,9 +206,15 @@ const regUser = async (username: string, password: string) => {
 		job: 'Неизвестно'
 	})
 	if (AuthStore.status === 'failed') {
-		alert(AuthStore.err)
+		showNotificationModal(AuthStore.err)
 	} else if (AuthStore.token) {
-		router.push('/client')
+		showNotificationModal(`
+    Это ваш публичный ключ сохраните его на защищенный носитель, при утере доступ к учетной записи будет потерян
+
+    ${AuthStore.key}`)
+		setTimeout(() => {
+			router.push('/client')
+		}, 10000)
 	}
 }
 
@@ -208,8 +224,9 @@ const loginUser = async (username: string, password: string) => {
 		username: username,
 		password: password
 	})
-
-	if (AuthStore.token) {
+	if (AuthStore.status === 'failed') {
+		showNotificationModal(AuthStore.err)
+	} else if (AuthStore.token) {
 		router.push('/client')
 	}
 }
