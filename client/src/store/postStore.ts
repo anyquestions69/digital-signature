@@ -13,7 +13,7 @@ interface Post {
 	filename: string
 	content: string
 	date: string
-	delivered?: boolean
+	delivered: boolean
 	signatures: Array<User>
 	userName: string
 	userId: number
@@ -78,6 +78,8 @@ export const postStore = defineStore('postStore', {
 					const processedPostList = await Promise.all(
 						//@ts-ignore
 						postListResponse.data.data.map(async post => {
+							await this.getSubs(post.id)
+							post.delivered = this.subscribers.failed.length === 0
 							const userName = await this.getChief(post.userId)
 							return { ...post, userName }
 						})
@@ -90,7 +92,6 @@ export const postStore = defineStore('postStore', {
 				console.error('Error fetching post list:', error)
 			}
 		},
-
 		async getPost(id: number) {
 			try {
 				const postResponse = await axios.get(`${BASE_URL}/post/${id}`)

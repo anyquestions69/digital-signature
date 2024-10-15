@@ -72,7 +72,8 @@ onMounted(async () => {
 	try {
 		await PostStore.getPost(postId)
 		await PostStore.getSubs(postId)
-		isSigned.value = PostStore.post.delivered ? PostStore.post.delivered : false
+
+		isSigned.value = PostStore.subscribers.failed.length === 0
 		console.log(isSigned.value)
 		isSuccessStatus.value = PostStore.checkSig(AuthStore.id)
 

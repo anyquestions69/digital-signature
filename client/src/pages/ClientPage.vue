@@ -49,11 +49,14 @@ const showNotificationModal = (message: string) => {
 // Подписка на WebSocket
 onMounted(() => {
 	if (role === 'Admin') {
-		socket.on('postSigned', (data: { postId: number; message: string }) => {
-			PostStore.getPost(data.postId)
-			console.log(`Приказ ${PostStore.post.title}  ${data.message}`)
-			showNotificationModal(`Приказ ${PostStore.post.title}  ${data.message}`)
-		})
+		socket.on(
+			'postSigned',
+			async (data: { postId: number; message: string }) => {
+				await PostStore.getPost(data.postId)
+				console.log(`Приказ ${PostStore.post.title}  ${data.message}`)
+				showNotificationModal(`Приказ ${PostStore.post.title}  ${data.message}`)
+			}
+		)
 	}
 })
 
