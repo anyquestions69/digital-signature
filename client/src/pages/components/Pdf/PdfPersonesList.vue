@@ -13,7 +13,7 @@
 				</div>
 				<div class="content__block">
 					<div class="block__content">
-						<div class="content__failed">
+						<div class="content__failed" v-if="personList.failed.length">
 							<h1>Не подписали:</h1>
 							<ul class="content__list">
 								<li v-for="item in personList.failed" :key="item.id">
@@ -26,7 +26,7 @@
 								</li>
 							</ul>
 						</div>
-						<div class="content__success">
+						<div class="content__success" v-if="personList.success.length">
 							<h1>Подписали:</h1>
 							<ul class="content__list">
 								<li v-for="item in personList.success" :key="item.id">
