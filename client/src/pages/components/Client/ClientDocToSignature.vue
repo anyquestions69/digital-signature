@@ -1,11 +1,9 @@
 <template>
     <div class="info__doc-to-signature">
-        <div class="doc-to-signature__header" v-if="AuthStore.getUserRole">
-            <a :class="`personal-info ${ isToPersonalType ? '' : 'un' }active`" @click="infoSearch">Разослать</a>
-            <a :class="`chat ${ !isToPersonalType ? '' : 'un' }active`" @click="chatSearch">Подать на подпись</a>
-        </div>
         <div class="doc-to-signature__content">
-            <div v-if="isToPersonalType" class="content__to-personal" style="padding: 30px;">
+            <div v-if="isToPersonalType" 
+                class="content__to-personal"
+                :style="`padding: 30px; overflow: ${ isLoaded ? 'auto' : 'none' }`">
                 <div v-if="!isLoaded" class="to-persona__form">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                         <path d="M0 96C0 60.7 28.7 32 64 32l384 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zM323.8 202.5c-4.5-6.6-11.9-10.5-19.8-10.5s-15.4 3.9-19.8 10.5l-87 127.6L170.7 297c-4.6-5.7-11.5-9-18.7-9s-14.2 3.3-18.7 9l-64 80c-5.8 7.2-6.9 17.1-2.9 25.4s12.4 13.6 21.6 13.6l96 0 32 0 208 0c8.9 0 17.1-4.9 21.2-12.8s3.6-17.4-1.4-24.7l-120-176zM112 192a48 48 0 1 0 0-96 48 48 0 1 0 0 96z"/>
@@ -46,12 +44,10 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 
-import { authStore } from '../../../store/authStore'
 import { postStore } from '../../../store/postStore'
 
 var isToPersonalType = ref(true)
 const PostStore = postStore()
-const AuthStore = authStore()
 const fileInput = ref( null )
 var files = reactive<File[]>( [] )
 var isLoaded = ref( false )
@@ -64,14 +60,6 @@ const create_post = async () => {
 	}
     files = []
     isLoaded.value = false
-}
- 
-const infoSearch = () => {
-	isToPersonalType.value = true
-}
-
-const chatSearch = () => {
-	isToPersonalType.value = false
 }
 
 const handleFileChange = (event: Event) => {
@@ -86,6 +74,10 @@ const deleteFile = (index: number) => {
 	if (index >= 0 && index < files.length) {
 		files.splice(index, 1)
 	}
+
+    if ( !files.length ) {
+        isLoaded.value = false
+    }
 }
 </script>
 
@@ -95,37 +87,11 @@ const deleteFile = (index: number) => {
     height: 100%;
     overflow: hidden;
 
-    .doc-to-signature__header {
-        border-bottom: 2px solid $border-color;
-        height: 40px;
-        @include Flex( row, start, center );
-
-        a {
-            height: 100%;
-            width: 22%;
-            border-right: 2px solid $border-color;
-            cursor: pointer;
-            overflow: hidden;
-            word-wrap: none;
-            @include Flex( row, center, center );
-
-            &.active {
-                box-shadow: 0px 0px 4px white inset;
-            }
-
-            &.unactive {
-
-                &:hover {
-                    box-shadow: 0px 0px 4px rgba(255, 255, 255, 0.5) inset;
-                }
-            }
-        }
-    }
-
     .doc-to-signature__content {
         position: relative;
         width: 100%;
         height: 100%;
+        overflow: hidden;
 
         .content__to-personal {
             width: 100%;
@@ -133,7 +99,7 @@ const deleteFile = (index: number) => {
 
             .to-persona__form {
                 width: 100%;
-                height: 83%;
+                height: 100%;
                 border: 4px dashed $main-font-color;
                 border-radius: 20px;
                 @include Flex;
@@ -157,7 +123,7 @@ const deleteFile = (index: number) => {
                 top: 0;
                 left: 0;
                 width: 100%;
-                height: 83%;
+                height: 100%;
                 opacity: 0;
 
                 &::-webkit-file-upload-button {
@@ -175,10 +141,15 @@ const deleteFile = (index: number) => {
                     width: 100%;
                     height: 100%;
                     margin-left: 8px;
-                    @include Flex(row, start, center);
-                    gap: 20px;
+                    @include Flex(row, start, start);
+                    flex-wrap: wrap;
+                    column-gap: 20px;
+                    row-gap: 30px;
 
                     .list__item {
+                        width: 23%;
+                        border: 1px solid silver;
+                        padding: 5px;
                         height: auto;
                         position: relative;
                         fill: $main-font-color;
@@ -193,8 +164,8 @@ const deleteFile = (index: number) => {
 
                         .item__del-btn {
                             position: absolute;
-                            top: -5px;
-                            right: 0px;
+                            top: 5px;
+                            right: 5px;
                             background: transparent;
                             border: 0;
                             width: 15px;
@@ -208,8 +179,6 @@ const deleteFile = (index: number) => {
                 padding: 10px 20px;
             }
         }
-
-        .content__to-chief {}
     }
 }
 </style>

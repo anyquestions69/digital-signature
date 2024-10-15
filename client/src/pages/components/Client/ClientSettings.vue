@@ -4,8 +4,14 @@
             <div class="content__theme">
                 <h3>Темная тема:</h3>
                 <label for="checked">
-                    <input type="checkbox" id="checked" v-model="themeVar">
-                    <span class="slider"></span>
+                    <input type="checkbox"
+                            id="checked"
+                            v-model="isDarkTheme"
+                            @focus="focusOnInput">
+                    <span class="slider"
+                          :style="`translate: ${ isDarkTheme ? '26' : '0'  }px 0px`">
+                    {{ isDarkTheme ? 'on' : 'off' }}
+                    </span>
                 </label>
             </div>
         </div>
@@ -13,77 +19,65 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 
-const themeVar = ref(false);
+const isDarkTheme = ref( true )
+
+const focusOnInput = () => {
+
+    console.log( isDarkTheme.value )
+}
 </script>
 
 <style scoped lang="scss">
 .setting__conteiner {
     padding: 30px;
     width: 100%;
-}
 
-.conteiner__content {
-    width: 100%;
-    border: 0;
-
-    .content__theme {
-        border: 0;
+    .conteiner__content {
         width: 100%;
-        @include Flex(row, start, center);
-        gap: 20px;
+        border: 0;
 
-        h3 {
-            font-size: 16px;
-        }
+        .content__theme {
+            border: 0;
+            width: 100%;
+            @include Flex(row, start, center);
+            gap: 20px;
 
-        label {
-            width: 60px;
-            height: 34px;
-            background: #e0e0e0;
-            border-radius: 17px;
-            overflow: hidden;
-            position: relative;
-            cursor: pointer;
-
-            input {
-                width: 100%;
-                height: 100%;
-                opacity: 0;
-                z-index: 20;
+            h3 {
+                font-size: 18px;
             }
 
-            span.slider {
-                width: 26px;
-                height: 26px;
-                border-radius: 50%;
-                background: #ffffff;
-                transition: transform 0.3s ease-in-out;
-                position: absolute;
-                top: 4px;
-                left: 4px;
-                z-index: 21;
+            label {
+                width: 60px;
+                height: 34px;
+                background: #a9a9a9;
+                border-radius: 17px;
+                overflow: hidden;
+                position: relative;
+                cursor: pointer;
 
-                &::before {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    left: 0;
+                input {
                     width: 100%;
                     height: 100%;
-                    background-color: #ffffff;
                     opacity: 0;
-                    transition: opacity 0.3s ease-in-out;
+                    z-index: 20;
                 }
 
-                &:checked {
-                    transform: translateX(26px);
-                    background-color: #2196f3;
-
-                    &::before {
-                        opacity: 1;
-                    }
+                span.slider {
+                    @include Flex( row, center, center );
+                    font-size: 13px;
+                    font-weight: 900;
+                    color: black;
+                    width: 26px;
+                    height: 26px;
+                    border-radius: 50%;
+                    background: #ffffff;
+                    transition: all 0.3s ease-in-out;
+                    position: absolute;
+                    top: 4px;
+                    left: 4px;
+                    z-index: 21;
                 }
             }
         }
