@@ -46,8 +46,8 @@ interface SubscribeConfig {
 }
 
 interface Subscribers {
-	name: string
-	signed: boolean
+	success: { id: number; name: string }[]
+	failed: { id: number; name: string }[]
 }
 
 export const postStore = defineStore('postStore', {
@@ -56,8 +56,12 @@ export const postStore = defineStore('postStore', {
 		post: {} as Post,
 		status: 'success',
 		err: '',
-		subscribers: [] as Subscribers[],
-		scroll: false
+		subscribers: { success: [], failed: [] } as Subscribers,
+		scroll: false,
+		temp: {
+			id: 0,
+			title: ''
+		}
 	}),
 
 	actions: {
@@ -148,17 +152,18 @@ export const postStore = defineStore('postStore', {
 
 		async deletePost(id: number) {
 			try {
+				console.log(`del - ${id}`)
 				const deletePostResponse = await axios.delete(
 					`${BASE_URL}/admin/post/${id}`,
 					{
 						headers: {
-							'Content-Type': 'multipart/form-data',
 							Authorization: `Bearer ${authStore().token}`
 						}
 					}
 				)
 				if (deletePostResponse.data.result === 'failed') {
 					this.status = 'failed'
+					this.err = deletePostResponse.data.data
 				} else {
 					this.status = 'success'
 				}
@@ -171,10 +176,10 @@ export const postStore = defineStore('postStore', {
 			try {
 				const updatePostResponse = await axios.patch(
 					`${BASE_URL}/admin/post/${id}`,
-					title,
+					{ title: title },
 					{
 						headers: {
-							'Content-Type': 'multipart/form-data',
+							'Content-Type': 'application/json',
 							Authorization: `Bearer ${authStore().token}`
 						}
 					}
@@ -213,15 +218,39 @@ export const postStore = defineStore('postStore', {
 						}
 					}
 				)
+
 				if (getSubsResponse.data.result === 'failed') {
 					this.status = 'failed'
 					this.err = getSubsResponse.data.data
-				} else {
-					this.status = 'success'
-					this.subscribers = getSubsResponse.data.data
+					return
 				}
+
+				const subscribers = getSubsResponse.data.data
+				if (!Array.isArray(subscribers)) {
+					this.status = 'failed'
+					this.err = 'Unexpected data format'
+					return
+				}
+
+				this.status = 'success'
+
+				const personList: Subscribers = subscribers.reduce<Subscribers>(
+					(acc, user) => {
+						if (user.signed) {
+							acc.success.push({ id: user.id, name: user.name })
+						} else {
+							acc.failed.push({ id: user.id, name: user.name })
+						}
+						return acc
+					},
+					{ success: [], failed: [] }
+				)
+
+				this.subscribers = personList
 			} catch (error) {
-				console.error('Error updating post:', error)
+				this.status = 'failed'
+				this.err = 'Error fetching subscribers' // Сообщение об ошибке
+				console.error('Error fetching subscribers:', error)
 			}
 		},
 
@@ -229,8 +258,12 @@ export const postStore = defineStore('postStore', {
 			;(this.postList = [] as Post[]),
 				(this.post = {} as Post),
 				(this.status = 'success'),
-				(this.subscribers = [] as Subscribers[]),
-				(this.scroll = false)
+				(this.subscribers = { success: [], failed: [] } as Subscribers),
+				(this.scroll = false),
+				(this.temp = {
+					id: 0,
+					title: ''
+				})
 		},
 		parseDate(dateString: string): Date {
 			const [day, month, year] = dateString.split('.').map(Number)

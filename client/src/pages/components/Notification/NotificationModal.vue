@@ -41,6 +41,7 @@ const close = () => {
 	// position: relative;
 	// right: 30px;
 	// bottom: 30px;
+	white-space: pre-line;
 	background: transparent;
 	padding: 20px;
 	border-radius: 5px;

@@ -45,6 +45,7 @@ export class UserService {
 				signedUsers.map(signature => signature.userId)
 			)
 			const result = users.map(user => ({
+				id: user.id,
 				name: user.name,
 				signed: signedUserIds.has(user.id)
 			}))

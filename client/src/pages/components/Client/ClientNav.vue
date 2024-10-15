@@ -12,21 +12,23 @@
 			<div class="list__body">
 				<li
 					class="list__item"
-					v-for="item in PagesStore.clientPage.navList"
+					v-for="item in filteredNavList"
 					:key="item.id"
 					@click="PagesStore.changeNavVariant(item.id)"
 				>
-					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" v-html="item.svg">
-						
-					</svg>
-					<p>
-						{{ item.text }}
-					</p>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 512 512"
+						v-html="item.svg"
+					></svg>
+					<p>{{ item.text }}</p>
 				</li>
 			</div>
 			<li class="list__item-end" @click="exitFromSys">
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-					<path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"/>
+					<path
+						d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"
+					/>
 				</svg>
 				<p>Выйти</p>
 			</li>
@@ -35,11 +37,10 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-
 import { authStore } from '../../../store/authStore.ts'
 import { pagesStore } from '../../../store/pagesStore.ts'
-
 
 const AuthStore = authStore()
 const PagesStore = pagesStore()
@@ -49,6 +50,14 @@ const exitFromSys = () => {
 	AuthStore.sysExit()
 	router.push('/api/auth')
 }
+
+console.log(AuthStore.role)
+
+const filteredNavList = computed(() => {
+	return PagesStore.clientPage.navList.filter(item => {
+		return !item.role || item.role === AuthStore.role
+	})
+})
 </script>
 
 <style lang="scss">
@@ -56,7 +65,7 @@ const exitFromSys = () => {
 	width: 100%;
 	height: 50px;
 	cursor: pointer;
-	@include FlexRow( start, center );
+	@include FlexRow(start, center);
 	gap: 20px;
 	padding: 5px 20px;
 	transition: all 0.5s ease;
@@ -99,8 +108,8 @@ const exitFromSys = () => {
 
 		.person__info {
 			p {
-                margin-left: 5px;
-                margin-top: 5px;
+				margin-left: 5px;
+				margin-top: 5px;
 
 				&.name {
 					font-size: 18px;

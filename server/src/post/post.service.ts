@@ -111,6 +111,7 @@ export class PostService {
 				hash: post.hash,
 				date: post.date,
 				content: Buffer.from(post.content).toString('base64'),
+				delivered: post.delivered ? post.delivered : false,
 				userId: post.userId,
 				signatures: post.signatures || []
 			}
@@ -140,9 +141,9 @@ export class PostService {
 		})
 	}
 
-	update(id: number, updatePostDto: UpdatePostDto) {
+	async update(id: number, updatePostDto: UpdatePostDto) {
 		try {
-			const data = this.prisma.post.update({
+			const data = await this.prisma.post.update({
 				data: updatePostDto,
 				where: { id: id }
 			})
@@ -158,9 +159,10 @@ export class PostService {
 		}
 	}
 
-	remove(id: number) {
+	async remove(id: number) {
 		try {
-			const data = this.prisma.post.delete({ where: { id: id } })
+			const data = await this.prisma.post.delete({ where: { id: id } })
+			console.log(data)
 			return {
 				result: 'success',
 				data: data

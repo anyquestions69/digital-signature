@@ -208,7 +208,13 @@ const regUser = async (username: string, password: string) => {
 	if (AuthStore.status === 'failed') {
 		showNotificationModal(AuthStore.err)
 	} else if (AuthStore.token) {
-		router.push('/client')
+		showNotificationModal(`
+    Это ваш публичный ключ сохраните его на защищенный носитель, при утере доступ к учетной записи будет потерян
+
+    ${AuthStore.key}`)
+		setTimeout(() => {
+			router.push('/client')
+		}, 10000)
 	}
 }
 
@@ -218,8 +224,9 @@ const loginUser = async (username: string, password: string) => {
 		username: username,
 		password: password
 	})
-
-	if (AuthStore.token) {
+	if (AuthStore.status === 'failed') {
+		showNotificationModal(AuthStore.err)
+	} else if (AuthStore.token) {
 		router.push('/client')
 	}
 }
