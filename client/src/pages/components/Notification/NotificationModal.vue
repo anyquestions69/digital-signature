@@ -55,12 +55,15 @@ const close = () => {
 .modal {
 	position: relative;
 	background: transparent;
-	padding: 20px;
+	padding: 25px;
 	border-radius: 5px;
 	max-width: 460px;
 	backdrop-filter: blur(7.5px);
 	background: rgba(0, 0, 0, 0.4);
 	box-shadow: 0px 0px 5px rgb(255, 255, 255, 0.5);
+	overflow-wrap: break-word;
+
+
 
 	animation: fadeInFromBottom 0.5s ease-out forwards;
 
