@@ -8,6 +8,11 @@ export class UserService {
 	constructor(private prisma: PrismaService) {}
 	async create(register: RegisterDto) {
 		const hashedPassword = await bcrypt.hash(register.password, 10)
+		this.prisma.post.updateMany({
+			data: {
+				delivered: false
+			}
+		})
 		return this.prisma.user.create({
 			data: {
 				username: register.username,

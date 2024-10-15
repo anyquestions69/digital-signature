@@ -47,20 +47,18 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
+import { onMounted } from 'vue'
 import { pagesStore } from '../../../store/pagesStore'
 import { postStore } from '../../../store/postStore'
 
 const PagesStore = pagesStore()
 const PostStore = postStore()
 
-const route = useRoute()
+let personList = PostStore.subscribers
 
-const postId = Number(route.params.id)
-
-PostStore.getSubs(postId)
-
-const personList = PostStore.subscribers
+onMounted(async () => {
+	personList = PostStore.subscribers
+})
 
 console.log(PostStore.subscribers)
 </script>

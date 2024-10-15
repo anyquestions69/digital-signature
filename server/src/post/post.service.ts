@@ -26,7 +26,8 @@ export class PostService {
 					filename: file.filename,
 					content: buffer,
 					hash: 'hashexample',
-					userId: id
+					userId: id,
+					delivered: false
 				}
 			})
 			const payload = {
@@ -35,7 +36,8 @@ export class PostService {
 				hash: data.hash,
 				date: data.date,
 				content: buffer.toString('base64'),
-				userId: data.userId
+				userId: data.userId,
+				delivered: data.delivered
 			}
 			return {
 				result: 'success',
@@ -111,7 +113,7 @@ export class PostService {
 				hash: post.hash,
 				date: post.date,
 				content: Buffer.from(post.content).toString('base64'),
-				delivered: post.delivered ? post.delivered : false,
+				delivered: post.delivered,
 				userId: post.userId,
 				signatures: post.signatures || []
 			}
