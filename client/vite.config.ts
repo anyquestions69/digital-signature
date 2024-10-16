@@ -20,12 +20,7 @@ export default defineConfig({
 	},
 	server: {
 		cors: true,
-<<<<<<< HEAD
 		host: true
-=======
-		port: 443,
-		host: true,
->>>>>>> 0bb70176f5c08a356dc951bfa26c6f60c4da1b61
 	},
 	build: {
 		outDir: 'dist',
