@@ -51,6 +51,7 @@ services:
       - .env
     volumes:
       - ./dist:/app/dist
+      
   pgadmin:
     container_name: pgadmin
     depends_on:

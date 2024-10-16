@@ -1,11 +1,9 @@
-FROM node:lts
+FROM node:lts-alpine
 
 WORKDIR /app
-
+RUN apk update && apk upgrade && apk add --no-cache make gcc g++ python3 
 COPY . .
-RUN apk add --no-cache make gcc g++ python3 && \
-    npm rebuild bcrypt --build-from-source && \
-    apk del make gcc g++ python3
+
 RUN npm i --force
 
 EXPOSE 3000
