@@ -1,7 +1,6 @@
 services:
   server:
-    build:
-      context: ./server
+    build: ./server
     ports:
       - 3000:3000
     depends_on:
@@ -34,10 +33,13 @@ services:
       - db
     image: nginx:latest
     ports:
-      - '8080:80'
+      - '80:80'
+    env_file:
+      - .env
     volumes:
       - ./nginx:/etc/nginx/conf.d
     restart: always
+
   client:
     build:
       context: ./client
@@ -50,6 +52,7 @@ services:
       - .env
     volumes:
       - ./dist:/app/dist
+      
   pgadmin:
     container_name: pgadmin
     depends_on:

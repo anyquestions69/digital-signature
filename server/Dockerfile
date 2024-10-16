@@ -1,13 +1,11 @@
-FROM node:18-alpine
+FROM node:lts-alpine
 
 WORKDIR /app
-
+RUN apk update && apk upgrade && apk add --no-cache make gcc g++ python3 
 COPY . .
-RUN npm i --force
-#RUN npx prisma migrate dev "init"
-RUN npm run build
 
-RUN npm rebuild bcrypt --build-from-source
+RUN npm i --force
+
 EXPOSE 3000
 
 # Command to run the application
