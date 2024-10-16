@@ -55,6 +55,7 @@ export const authStore = defineStore('authStore', {
 					this.username = regConfig.username
 					this.name = regConfig.name
 					this.id = regResponse.data.data.id
+					this.role = regResponse.data.data.role
 				}
 			} catch (err: any) {
 				this.status = 'failed'

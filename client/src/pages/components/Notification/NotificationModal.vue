@@ -59,7 +59,7 @@ const close = () => {
 	border-radius: 5px;
 	max-width: 460px;
 	backdrop-filter: blur(7.5px);
-	background: rgba(0, 0, 0, 0.4);
+	background: rgba(249, 237, 8, 0.4);
 	box-shadow: 0px 0px 5px rgb(255, 255, 255, 0.5);
 	overflow-wrap: break-word;
 

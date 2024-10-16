@@ -165,7 +165,7 @@ const isCliced = ref(false)
 const showNotification = ref(false)
 const notificationMessage = ref('')
 
-const showNotificationModal = ( message: string ) => {
+const showNotificationModal = (message: string) => {
 	notificationMessage.value = message
 	showNotification.value = true
 }
@@ -209,7 +209,7 @@ const regUser = async (username: string, password: string) => {
 		showNotificationModal(AuthStore.err)
 	} else if (AuthStore.token) {
 		showNotificationModal(`
-    Это ваш публичный ключ сохраните его на защищенный носитель, при утере доступ к учетной записи будет потерян:
+    Это ваш публичный ключ сохраните его на защищенный носитель, при утере доступ к учетной записи будет потерян:                 
 	
     ${AuthStore.key}`)
 		setTimeout(() => {
@@ -278,7 +278,7 @@ const loginUser = async (username: string, password: string) => {
 
 			a {
 				cursor: pointer;
-				color: white;
+				color: rgb(4, 74, 74);
 				transition: all 0.5s ease;
 
 				&:hover {
