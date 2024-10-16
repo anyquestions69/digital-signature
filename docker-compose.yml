@@ -1,7 +1,6 @@
 services:
   server:
-    build:
-      context: ./server
+    build: ./server
     ports:
       - 3000:3000
     depends_on:
@@ -33,21 +32,13 @@ services:
       - db
     image: nginx:latest
     ports:
-      - '8080:80'
+      - '80:80'
     env_file:
       - .env
     volumes:
       - ./nginx:/etc/nginx/conf.d
     restart: always
-  # stamp:
-  #   build:
-  #     context: ./sign_service
-  #   volumes:
-  #     - files:/service/dist
-  #     - stamped_files:/service/edited
-  #   ports:
-  #     - '50051:50051'
-  #   command: python3 /service/main.py
+
   client:
     build:
       context: ./client
