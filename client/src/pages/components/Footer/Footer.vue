@@ -96,7 +96,7 @@
                     transition: all 0.5s ease;
 
                     path {
-                        fill: #1dc7cd;
+                        fill: #000000;
                     }
                 }
             }
