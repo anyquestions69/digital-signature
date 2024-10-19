@@ -9,4 +9,4 @@ RUN npm i --force
 EXPOSE 3000
 
 # Command to run the application
-CMD ["npm", "run", "start"]
+CMD ["sh", "-c", "npx prisma migrate dev && npm run start"]

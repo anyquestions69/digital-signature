@@ -37,12 +37,18 @@ const PostStore = postStore()
 const role = AuthStore.role
 
 // Состояния для управления модальным окном
-const showNotification = ref(false)
+const showNotification = ref( false )
 const notificationMessage = ref('')
 
 // Функция для показа уведомления
 const showNotificationModal = (message: string) => {
 	notificationMessage.value = message
+	if( showNotification.value ) {
+		showNotification.value = false
+		setTimeout(() => {
+			showNotification.value = true
+		}, 100);
+	}
 	showNotification.value = true
 }
 
