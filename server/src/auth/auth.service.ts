@@ -1,11 +1,6 @@
-import {
-	Injectable,
-	StreamableFile,
-	UnauthorizedException
-} from '@nestjs/common'
+import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import * as bcrypt from 'bcrypt'
-import { createReadStream } from 'fs'
 import { EncryptionService } from 'src/encryption/encryption.service'
 import { UserService } from 'src/user/user.service'
 import { LoginDto } from './dto/login.dto'
@@ -17,6 +12,7 @@ export class AuthService {
 		private usersService: UserService,
 		private readonly jwtService: JwtService
 	) {}
+
 	async register(register: RegisterDto) {
 		const user = await this.usersService.findByUsername(register.username)
 		if (user) {
@@ -25,6 +21,7 @@ export class AuthService {
 				data: 'Пользователь с таким логином уже существует'
 			}
 		}
+
 		if (register.password !== register.repass) {
 			return {
 				result: 'failed',
@@ -32,32 +29,23 @@ export class AuthService {
 			}
 		}
 		const reg = await this.usersService.create(register)
+
 		const { publicKey } = await this.rsa.generateKeys(
 			register.username,
 			register.password
 		)
+
 		const payload = {
 			id: reg.id,
 			username: String(reg.username),
 			role: reg.role
 		}
 
-		const file = createReadStream('./keys/' + register.username + '/public.pem')
-		const res = new StreamableFile(file)
-		let publicKeyText = ''
-
-		const reader = res.getStream()
-		reader.on('data', chunk => {
-			publicKeyText += chunk.toString()
-		})
-		await new Promise(resolve => {
-			reader.on('end', resolve)
-		})
 		return {
 			result: 'success',
 			data: payload,
-			key: publicKeyText,
-			token: await this.jwtService.signAsync(payload)
+			token: await this.jwtService.signAsync(payload),
+			keyPath: `/auth/public-key/${register.username}`
 		}
 	}
 

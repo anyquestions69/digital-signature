@@ -31,7 +31,7 @@ export const authStore = defineStore('authStore', {
 		role: 'Guest',
 		post: '',
 		division: '',
-		key: '',
+		keyPath: '',
 		token: '',
 		status: '',
 		err: ''
@@ -40,28 +40,35 @@ export const authStore = defineStore('authStore', {
 	actions: {
 		async regUser(regConfig: RegConfig) {
 			try {
-				const regResponse = await axios.post(
-					BASE_URL + '/auth/register',
-					regConfig
-				)
-
+				const regResponse = await axios.post(BASE_URL + '/auth/register', regConfig);
 				if (regResponse.data.result === 'failed') {
-					this.status = 'failed'
-					this.err = regResponse.data.data
+					this.status = 'failed';
+					this.err = regResponse.data.data;
 				} else {
-					this.key = regResponse.data.key
-					this.token = regResponse.data.token
-					this.status = 'success'
-					this.username = regConfig.username
-					this.name = regConfig.name
-					this.id = regResponse.data.data.id
-					this.role = regResponse.data.data.role
+					this.token = regResponse.data.token;
+					this.status = 'success';
+					this.username = regConfig.username;
+					this.name = regConfig.name;
+					this.id = regResponse.data.data.id;
+					this.role = regResponse.data.data.role;
+		
+					const keyResponse = await axios.get(BASE_URL + regResponse.data.keyPath, {
+						responseType: 'blob',
+					});
+					const url = window.URL.createObjectURL(new Blob([keyResponse.data]));
+					const link = document.createElement('a');
+					link.href = url;
+					link.setAttribute('download', `${regConfig.username}-public.pem`);
+					document.body.appendChild(link);
+					link.click();
+					link.remove();
 				}
 			} catch (err: any) {
-				this.status = 'failed'
-				this.err = `Unexpected error: ${err.message}`
+				this.status = 'failed';
+				this.err = `Unexpected error: ${err.message}`;
 			}
 		},
+		
 
 		async loginUser(logConfig: LogConfig) {
 			try {
@@ -152,7 +159,7 @@ export const authStore = defineStore('authStore', {
 			this.username = ''
 			this.name = ''
 			this.role = 'Guest'
-			this.key = ''
+			this.keyPath = ''
 			this.token = ''
 			this.status = ''
 			this.post = ''

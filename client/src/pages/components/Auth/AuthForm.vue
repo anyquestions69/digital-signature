@@ -209,12 +209,10 @@ const regUser = async (username: string, password: string) => {
 		showNotificationModal(AuthStore.err)
 	} else if (AuthStore.token) {
 		showNotificationModal(`
-    Это ваш публичный ключ сохраните его на защищенный носитель, при утере доступ к учетной записи будет потерян:                 
-	
-    ${AuthStore.key}`)
+    Ваш публичный ключ был сохранен в загрузки, при его потере вы не сможете пользоваться учетной записью`)
 		setTimeout(() => {
 			router.push('/client')
-		}, 10000)
+		}, 4000)
 	}
 }
 
