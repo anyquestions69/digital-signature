@@ -8,7 +8,6 @@ WORKDIR /client
 COPY package*.json ./
 
 RUN apk update
-RUN apk add python3 alpine-sdk
 RUN npm install --force
 RUN npm install @vue/cli@3.7.0 -g
 

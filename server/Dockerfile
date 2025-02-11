@@ -1,10 +1,11 @@
 FROM node:lts-alpine
 
 WORKDIR /app
-RUN apk update && apk upgrade && apk add --no-cache make gcc g++ python3 
+# RUN apk update && apk upgrade && apk add --no-cache make gcc g++ python3 
+RUN apk update && apk upgrade
 COPY . .
 
-RUN npm i --force
+RUN npm i 
 
 EXPOSE 3000
 
